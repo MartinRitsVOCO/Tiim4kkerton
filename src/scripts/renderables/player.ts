@@ -16,7 +16,6 @@ class PlayerEntity extends me.Renderable {
     private isGrounded: boolean = false;
 
     private groundY: number = 0;
-    private groundHeight: number = 0;
 
     constructor(x: number, groundY: number) {
         super(x, groundY, PlayerEntity.PLAYER_WIDTH, PlayerEntity.PLAYER_HEIGHT);
