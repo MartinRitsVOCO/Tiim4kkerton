@@ -12,7 +12,7 @@ class PlayScreen extends me.Stage {
         const viewportWidth = me.game.viewport.width;
         const viewportHeight = me.game.viewport.height;
         const groundHeight = 50;
-        const groundYPosition = viewportHeight - groundHeight / 2;
+        const groundYPosition = viewportHeight - groundHeight;
 
         const ground = new me.Renderable(viewportWidth, viewportHeight, viewportWidth, groundHeight);
         ground.alwaysUpdate = false;
@@ -26,7 +26,7 @@ class PlayScreen extends me.Stage {
         };
         me.game.world.addChild(ground, 1);
 
-        const player = new PlayerEntity(viewportWidth / 5, groundYPosition, groundHeight);
+        const player = new PlayerEntity(viewportWidth / 5, groundYPosition);
 
         me.game.world.addChild(player, 2)
     }

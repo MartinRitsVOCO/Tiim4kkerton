@@ -3,7 +3,7 @@ import * as me from "melonjs";
 class PlayerEntity extends me.Renderable {
 
     public static PLAYER_HEIGHT = 64;
-    public static PLAYER_WIDTH = 32;
+    public static PLAYER_WIDTH = 48;
     public static JUMP_VELOCITY = -25;
     public static DUCK_HEIGHT = 32;
 
@@ -18,10 +18,11 @@ class PlayerEntity extends me.Renderable {
     private groundY: number = 0;
     private groundHeight: number = 0;
 
-    constructor(x: number, groundY: number, groundHeight: number) {
+    constructor(x: number, groundY: number) {
         super(x, groundY, PlayerEntity.PLAYER_WIDTH, PlayerEntity.PLAYER_HEIGHT);
-        this.groundY = groundY + 7;
-        this.groundHeight = groundHeight;
+        this.groundY = groundY;
+
+        this.anchorPoint.set(0.5, 1);
     }
 
     private jump() {
@@ -36,7 +37,7 @@ class PlayerEntity extends me.Renderable {
         if (this.isGrounded && !this.isJumping) {
             this.isDucking = true;
             this.height = PlayerEntity.DUCK_HEIGHT;
-            this.pos.y = this.groundY - PlayerEntity.PLAYER_HEIGHT / 4 - this.height;
+            this.pos.y = this.groundY;
         }
     }
 
@@ -44,7 +45,7 @@ class PlayerEntity extends me.Renderable {
         if (this.isDucking) {
             this.isDucking = false;
             this.height = PlayerEntity.PLAYER_HEIGHT;
-            this.pos.y = this.groundY - this.height;
+            this.pos.y = this.groundY;
         }
     }
 
@@ -65,8 +66,8 @@ class PlayerEntity extends me.Renderable {
             }
             this.pos.y! += this.velocityY;
 
-            if (this.pos.y! > this.groundY - this.height) {
-                this.pos.y = this.groundY - this.height;
+            if (this.pos.y! > this.groundY) {
+                this.pos.y = this.groundY;
                 this.velocityY = 0;
                 this.isGrounded = true;
                 this.isJumping = false;
