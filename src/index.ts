@@ -1,4 +1,4 @@
-import { audio, loader, state, device, video, plugin, pool } from "melonjs";
+import { audio, loader, state, device, video, plugin, pool, input } from "melonjs";
 import TitleScreen from "./scripts/stage/title.js";
 import PlayScreen from "./scripts/stage/play.js";
 import PlayerEntity from "./scripts/renderables/player.js";
@@ -26,6 +26,10 @@ device.onReady(() => {
             plugin.register(new debugPlugin.DebugPanelPlugin, "debugPanel");
         });
     }
+
+    input.bindKey(input.KEY.UP, "jump", true);
+    input.bindKey(input.KEY.DOWN, "duck", true);
+    input.bindKey(input.KEY.DOWN, "duck", false);
 
     // set and load all resources.
     loader.preload(DataManifest, function () {
