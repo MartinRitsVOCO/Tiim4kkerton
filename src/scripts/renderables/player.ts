@@ -2,6 +2,8 @@ import * as me from "melonjs";
 
 class PlayerEntity extends me.Renderable {
 
+    private image: me.Sprite;
+
     public static PLAYER_HEIGHT = 64;
     public static PLAYER_WIDTH = 48;
     public static JUMP_VELOCITY = -25;
@@ -22,6 +24,19 @@ class PlayerEntity extends me.Renderable {
         this.groundY = groundY;
 
         this.anchorPoint.set(0.5, 1);
+
+        // Player sprite
+        const SVGimage = me.loader.getImage("player-texture");
+
+        const offscreenCanvas = document.createElement("canvas");
+        offscreenCanvas.width = this.width;
+        offscreenCanvas.height = this.height;
+        const ctx = offscreenCanvas.getContext("2d")!;
+
+        ctx.drawImage(SVGimage, 0, 0, this.width, this.height);
+
+        this.image = new me.Sprite(0, 0, { image: offscreenCanvas });
+
     }
 
     private jump() {
@@ -96,7 +111,14 @@ class PlayerEntity extends me.Renderable {
             this.height
         );
 
-        renderer.stroke(rect, true);
+        renderer.stroke(rect, true); // jätsin alles näidiseks
+
+        if (this.image) {
+
+            renderer.translate(this.pos.x, this.pos.y);
+    
+            this.image.draw(renderer);
+        }
     }
 
     public destroy(...args: any[]): void {
