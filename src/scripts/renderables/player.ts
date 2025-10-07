@@ -29,11 +29,11 @@ class PlayerEntity extends me.Renderable {
         const SVGimage = me.loader.getImage("player-texture");
 
         const offscreenCanvas = document.createElement("canvas");
-        offscreenCanvas.width = this.width;
-        offscreenCanvas.height = this.height;
+        offscreenCanvas.width = this.width*1.75;
+        offscreenCanvas.height = this.height*1.75;
         const ctx = offscreenCanvas.getContext("2d")!;
 
-        ctx.drawImage(SVGimage, 0, 0, this.width, this.height);
+        ctx.drawImage(SVGimage, -20, -20, this.width*1.75, this.height*1.75);
 
         this.image = new me.Sprite(0, 0, { image: offscreenCanvas });
 
@@ -93,7 +93,7 @@ class PlayerEntity extends me.Renderable {
         return true;
     }
 
-    public draw(renderer: me.Renderer) {
+    public draw(renderer: me.CanvasRenderer | me.WebGLRenderer) {
 
         let color = new me.Color(0, 255, 0);
         if (this.isDucking) {
@@ -114,10 +114,14 @@ class PlayerEntity extends me.Renderable {
         renderer.stroke(rect, true); // jätsin alles näidiseks
 
         if (this.image) {
+            
+            renderer.save();
 
-            renderer.translate(this.pos.x, this.pos.y);
+            renderer.translate(this.pos.x ?? 0, this.pos.y ?? 0);
     
             this.image.draw(renderer);
+
+            renderer.restore();
         }
     }
 
