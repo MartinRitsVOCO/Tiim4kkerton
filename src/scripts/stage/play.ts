@@ -1,5 +1,5 @@
 import * as me from "melonjs";
-import PlayerEntity from "../renderables/player";
+import PlayerEntity from "../entities/player";
 
 class PlayScreen extends me.Stage {
     /**
