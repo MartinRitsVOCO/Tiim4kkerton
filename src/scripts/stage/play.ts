@@ -1,13 +1,13 @@
 import * as me from "melonjs";
 import PlayerEntity from "../entities/player";
+import BlockerEntity from "../entities/blocker";
 
 class PlayScreen extends me.Stage {
     /**
      *  action to perform on state change
      */
     onResetEvent() {
-        // add a gray background to the default Stage
-        me.game.world.addChild(new me.ColorLayer("background", "#202020"));
+        me.game.world.addChild(new me.ColorLayer("background", "#b82e2eff"));
 
         const viewportWidth = me.game.viewport.width;
         const viewportHeight = me.game.viewport.height;
@@ -28,7 +28,10 @@ class PlayScreen extends me.Stage {
 
         const player = new PlayerEntity(viewportWidth / 5, groundYPosition);
 
-        me.game.world.addChild(player, 2)
+        me.game.world.addChild(player, 50)
+
+        const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 48, 1);
+        me.game.world.addChild(blocker, 30);
     }
 };
 

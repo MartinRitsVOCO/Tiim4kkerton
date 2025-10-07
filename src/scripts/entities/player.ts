@@ -27,17 +27,18 @@ class PlayerEntity extends me.Entity {
         this.body.setCollisionMask(me.collision.types.ALL_OBJECT);
         this.body.collisionType = me.collision.types.PLAYER_OBJECT;
 
-        this.body.addShape(new me.Rect(0, 0, this.width, this.height));
-        this.body.ignoreGravity = true
+        this.body.removeShapeAt(0);
+        this.body.addShape(new me.Rect(0, 0, this.width / 2, this.height / 2));
+        this.body.gravityScale = this.gravity;
         this.alwaysUpdate = true;
 
         this.anchorPoint.set(0.5, 0);
     }
 
     private jump() {
-        if (this.body.vel.y === 0 && !this.isDucking) {
+        if (!this.isDucking) {
             this.isJumping = true;
-            this.body.vel.y = PlayerEntity.JUMP_VELOCITY;
+            this.body.force.y = PlayerEntity.JUMP_VELOCITY;
         }
     }
 
@@ -46,9 +47,9 @@ class PlayerEntity extends me.Entity {
 
         this.height = PlayerEntity.DUCK_HEIGHT;
         this.body.removeShapeAt(0);
-        const shape = new me.Rect(0, 0, this.width, this.height);
+        const shape = new me.Rect(0, 0, this.width / 2, this.height / 2);
         this.body.addShape(shape);
-        this.pos.y! += PlayerEntity.PLAYER_HEIGHT - PlayerEntity.DUCK_HEIGHT;
+        this.pos.y! += (PlayerEntity.PLAYER_HEIGHT - PlayerEntity.DUCK_HEIGHT) / 2;
     }
 
     private duckEnd() {
@@ -56,9 +57,9 @@ class PlayerEntity extends me.Entity {
 
         this.height = PlayerEntity.PLAYER_HEIGHT;
         this.body.removeShapeAt(0);
-        const shape = new me.Rect(0, 0, this.width, this.height);
+        const shape = new me.Rect(0, 0, this.width / 2, this.height / 2);
         this.body.addShape(shape);
-        this.pos.y! += PlayerEntity.PLAYER_HEIGHT + PlayerEntity.DUCK_HEIGHT;
+        this.pos.y! -= (PlayerEntity.PLAYER_HEIGHT - PlayerEntity.DUCK_HEIGHT) / 2;
     }
 
     public update(dt: number): boolean {
@@ -73,9 +74,9 @@ class PlayerEntity extends me.Entity {
             this.duckEnd();
         }
 
-        if (this.body.vel.y !== 0) {
-            this.body.vel.y! += this.gravity;
-        }
+        // if (this.pos.y! < this.groundY - this.height / 2) {
+        //     this.body.vel.y! += this.gravity;
+        // }
 
         if (this.pos.y! > this.groundY - this.height / 2) {
             this.isJumping = false;
@@ -88,13 +89,26 @@ class PlayerEntity extends me.Entity {
         return true;
     }
 
-    // onCollision(response: ResponseObject): boolean {
-    //     if (response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
-    //         return false;
-    //     }
+    onCollision(response: ResponseObject, other: me.Entity): boolean {
+        if (response.b.body.collisionType === me.collision.types.WORLD_SHAPE) {
+            if (this.body.falling &&
+                !me.input.isKeyPressed("down") &&
+                // Shortest overlap would move the player upward
+                (response.overlapV.y! > 0) &&
+                // The velocity is reasonably fast enough to have penetrated to the overlap depth
+                (~~this.body.vel.y! >= ~~response.overlapV.y!)
+            ) {
+                // Disable collision on the x axis
+                // response.overlapV.x = 0;
+                // Repond to the platform (it is solid)
+                return true;
+            }
 
-    //     return false;
-    // }
+            return false;
+        }
+
+        return false;
+    }
 
     public draw(renderer: me.Renderer) {
 
