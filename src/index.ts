@@ -5,6 +5,9 @@ import PlayerEntity from "./scripts/renderables/player.js";
 import DataManifest from "./manifest.js";
 import "./index.scss"
 
+
+
+
 device.onReady(() => {
 
     // initialize the display canvas once the device/browser is ready

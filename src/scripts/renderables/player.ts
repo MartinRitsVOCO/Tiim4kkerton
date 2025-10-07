@@ -129,7 +129,7 @@ class PlayerEntity extends me.Renderable {
             this.height
         );
 
-        renderer.stroke(rect, true); // jätsin alles näidiseks
+        // renderer.stroke(rect, true); // jätsin alles näidiseks
 
         if (this.image) {
             
