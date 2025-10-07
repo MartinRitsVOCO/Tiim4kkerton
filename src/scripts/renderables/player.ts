@@ -28,14 +28,32 @@ class PlayerEntity extends me.Renderable {
         // Player sprite
         const SVGimage = me.loader.getImage("player-texture");
 
+        const scaleFactor = 4;
+
+        // Offscreen canvas at high resolution
         const offscreenCanvas = document.createElement("canvas");
-        offscreenCanvas.width = this.width*1.75;
-        offscreenCanvas.height = this.height*1.75;
+        offscreenCanvas.width = this.width * scaleFactor;
+        offscreenCanvas.height = this.height * scaleFactor;
+
         const ctx = offscreenCanvas.getContext("2d")!;
+        ctx.imageSmoothingEnabled = false;
 
-        ctx.drawImage(SVGimage, -20, -20, this.width*1.75, this.height*1.75);
+        // Draw the SVG at 4× resolution
+        ctx.drawImage(SVGimage, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
 
-        this.image = new me.Sprite(0, 0, { image: offscreenCanvas });
+        // Create a final canvas at your target size
+        const finalCanvas = document.createElement("canvas");
+        finalCanvas.width = this.width*2;
+        finalCanvas.height = this.height*2;
+
+        const finalCtx = finalCanvas.getContext("2d")!;
+        finalCtx.imageSmoothingEnabled = false;
+
+        // Draw the high-res offscreen canvas scaled down to final size
+        finalCtx.drawImage(offscreenCanvas, 0, 0, finalCanvas.width, finalCanvas.height);
+
+        // Create a sprite from the final canvas
+        this.image = new me.Sprite(-27, -28, { image: finalCanvas });
 
     }
 
