@@ -2,7 +2,7 @@ import * as me from "melonjs";
 import PlayerEntity from "../entities/player";
 import BlockerEntity from "../entities/blocker";
 import ScrollingBackground from "../renderables/background";
-import Collectable from "../entities/collectable";
+import spawnCollectable from "../util/spawnCollectable";
 
 // Define a new state to switch to when the game is over. 
 // Assuming you have a MENU state, or you could define a dedicated GAME_OVER state.
@@ -20,6 +20,8 @@ class PlayScreen extends me.Stage {
         console.log(type)
     }
 
+    private timerId: number | null = null;
+
 
     /**
      *  action to perform on state change
@@ -36,7 +38,7 @@ class PlayScreen extends me.Stage {
         const imagePool = [];
         // Default 'empty' background:
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-tühi-taust") as HTMLImageElement);
-        
+
         // Background variations:
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-postrite-sein") as HTMLImageElement);
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-arvutiklass") as HTMLImageElement);
@@ -76,22 +78,23 @@ class PlayScreen extends me.Stage {
             console.log("45 seconds passed. Finishing stage.");
             // Stop the game and switch to the defined finish state
             // me.state.change(GAME_FINISH_STATE);
-        }, GAME_DURATION_MS);
+        }, GAME_DURATION_MS)
+        this.timerId = me.timer.setInterval(() => {
+            spawnCollectable(["tireBad", "dryerBad", "portfolioBad", "bunBad", "cameraBad", "hammerBad"], groundHeight, speed, this.onCollection)
+        }, 3000, true);
     }
 
-    /**
-     * action to perform when leaving this screen (state change)
-     */
-    // Clean up the timer when the stage is closed
-    onDestroyEvent() {
-        // Clear the timer if it hasn't fired yet to prevent unexpected state changes later
+    onDestroyEvent(...args: any[]): void {
         if (this.finishTimerId !== null) {
             me.timer.clearTimeout(this.finishTimerId);
             this.finishTimerId = null;
         }
-        
-        // Call parent's method to clean up the stage
-        super.onDestroyEvent();
+      
+        if (this.timerId !== null) {
+            me.timer.clearInterval(this.timerId);
+            this.timerId = null;
+        }
+        super.onDestroyEvent(...args);
     }
 };
 
