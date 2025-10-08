@@ -90,7 +90,7 @@ class PlayerEntity extends me.Entity {
 
     private checkOverhead(): boolean {
         const vectorStart = new me.Vector2d(this.pos.x, this.pos.y)
-        const vectorEnd = new me.Vector2d(this.pos.x, this.pos.y! - (PlayerEntity.PLAYER_HEIGHT - PlayerEntity.DUCK_HEIGHT) / 2)
+        const vectorEnd = new me.Vector2d(this.pos.x! + 10, this.pos.y! - (PlayerEntity.PLAYER_HEIGHT - PlayerEntity.DUCK_HEIGHT) / 2)
         const collisionResults = me.collision.rayCast(new me.Line(0, 0, [vectorStart, vectorEnd]))
         for (const res of collisionResults) {
             if (res.body.collisionType == me.collision.types.WORLD_SHAPE) {
