@@ -10,8 +10,9 @@ const spawnCollectable = (collectableType: collectTypes[], groundHeight: number,
   const groundYPosition = viewportHeight - groundHeight;
 
   const randomIndex = Math.floor(Math.random() * collectableType.length)
+  const randomHeight = Math.floor(Math.random() * ((groundYPosition - 80) - 80 + 1)) + 80;
 
-  const collectable = new Collectable(viewportWidth, groundYPosition - 120, speed, collectableType[randomIndex], onCollection)
+  const collectable = new Collectable(viewportWidth, randomHeight, speed, collectableType[randomIndex], onCollection)
 
   me.game.world.addChild(collectable, 40);
 }
