@@ -27,7 +27,7 @@ class ScrollingBackground extends me.Container {
     // Define the maximum number of sprites to use
     private static MAX_SPRITES = 4;
     // Define the chance (0.0 to 1.0) of selecting an alternate image
-    private static VARIATION_CHANCE = 0.40;
+    private static VARIATION_CHANCE = 0.30;
 
     constructor(viewportWidth: number, viewportHeight: number, imagePool: HTMLImageElement[], speed: number) {
         // --- 1. Calculate properties using local variables before super() ---
