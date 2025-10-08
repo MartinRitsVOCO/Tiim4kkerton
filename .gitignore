@@ -4,5 +4,7 @@ public/
 .DS_Store
 package-lock.json
 
+# Robini gitignore'id
 combined.css
 combined.js
+BACKUP-src/

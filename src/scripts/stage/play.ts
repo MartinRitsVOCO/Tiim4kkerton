@@ -4,7 +4,18 @@ import BlockerEntity from "../entities/blocker";
 import ScrollingBackground from "../renderables/background";
 import Collectable from "../entities/collectable";
 
+// Define a new state to switch to when the game is over. 
+// Assuming you have a MENU state, or you could define a dedicated GAME_OVER state.
+// If you don't have a MENU state, you must set one up in your game's initialization.
+// const GAME_FINISH_STATE = me.state.MENU;
+
+const GAME_DURATION_MS = 4500; // 45 seconds in milliseconds
+
 class PlayScreen extends me.Stage {
+    // Property to hold the ID of the timeout so we can cancel it if needed
+    private finishTimerId: number | null = null;
+    private gameSpeed: number = 2;
+
     onCollection(type: string) {
         console.log(type)
     }
@@ -17,8 +28,6 @@ class PlayScreen extends me.Stage {
     onResetEvent() {
         const viewportWidth = me.game.viewport.width;
         const viewportHeight = me.game.viewport.height;
-
-        const speed = 2;
 
         // add a color layer background to the default Stage
         me.game.world.addChild(new me.ColorLayer("background", "#b82e2eff"), -1);
@@ -33,7 +42,7 @@ class PlayScreen extends me.Stage {
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-arvutiklass") as HTMLImageElement);
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-3D-printer") as HTMLImageElement);
 
-        const background = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, speed);
+        const background = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, this.gameSpeed);
         
         me.game.world.addChild(background, 0);
 
@@ -56,11 +65,33 @@ class PlayScreen extends me.Stage {
 
         me.game.world.addChild(player, 50)
 
-        const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 40, speed, 160, 24);
+        const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 40, this.gameSpeed, 160, 24);
         me.game.world.addChild(blocker, 30);
 
-        const collectable = new Collectable(viewportWidth, groundYPosition - 120, 1, "hammerBad", this.onCollection)
+        const collectable = new Collectable(viewportWidth, groundYPosition - 120, this.gameSpeed, "hammerBad", this.onCollection)
         me.game.world.addChild(collectable, 40);
+
+        // Stage Time
+        this.finishTimerId = me.timer.setTimeout(() => {
+            console.log("45 seconds passed. Finishing stage.");
+            // Stop the game and switch to the defined finish state
+            // me.state.change(GAME_FINISH_STATE);
+        }, GAME_DURATION_MS);
+    }
+
+    /**
+     * action to perform when leaving this screen (state change)
+     */
+    // Clean up the timer when the stage is closed
+    onDestroyEvent() {
+        // Clear the timer if it hasn't fired yet to prevent unexpected state changes later
+        if (this.finishTimerId !== null) {
+            me.timer.clearTimeout(this.finishTimerId);
+            this.finishTimerId = null;
+        }
+        
+        // Call parent's method to clean up the stage
+        super.onDestroyEvent();
     }
 };
 

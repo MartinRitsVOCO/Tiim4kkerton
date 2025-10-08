@@ -21,6 +21,9 @@ class ScrollingBackground extends me.Container {
     private backgroundImages: BackgroundImage[]; // Pool of images
     private managedSprites: ManagedSprite[] = []; // Array to manage sprites and their widths
 
+    // Define the overlap amount (2 pixels)
+    private static OVERLAP_AMOUNT = 2; 
+
     // Define the maximum number of sprites to use
     private static MAX_SPRITES = 4;
     // Define the chance (0.0 to 1.0) of selecting an alternate image
@@ -97,7 +100,7 @@ class ScrollingBackground extends me.Container {
             this.addChild(newManagedSprite.sprite, 0);
             
             // Increment currentX by the *actual scaled width* of the created sprite
-            currentX += newManagedSprite.scaledWidth;
+            currentX += newManagedSprite.scaledWidth - ScrollingBackground.OVERLAP_AMOUNT;
         }
 
         this.isPersistent = true;
@@ -179,8 +182,9 @@ class ScrollingBackground extends me.Container {
                 this.removeChild(sprite, true); 
 
                 // 3b. Create a brand new managed sprite (potentially with a new image/width)
-                // Its new starting position is the found rightmostEdgeX
-                const newManagedSprite = this.createNewSprite(rightmostEdgeX, 0);
+                // Its new starting position is the found rightmostEdgeX - 2px overlap
+                const newX = rightmostEdgeX - ScrollingBackground.OVERLAP_AMOUNT;
+                const newManagedSprite = this.createNewSprite(newX, 0);
 
                 // 3c. Update the array slot and container
                 this.managedSprites[i] = newManagedSprite;
