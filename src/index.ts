@@ -1,7 +1,7 @@
 import { audio, loader, state, device, video, plugin, pool, input } from "melonjs";
 import * as me from "melonjs";
 import TitleScreen from "./scripts/stage/title.js";
-// import PlayScreen from "./scripts/stage/play.js";
+import PlayScreen from "./scripts/stage/play.js";
 import PlayerEntity from "./scripts/entities/player.js";
 import DataManifest from "./manifest.js";
 import "./index.scss"
@@ -46,7 +46,7 @@ device.onReady(() => {
     loader.preload(DataManifest, function () {
         // set the user defined game stages
         state.set(state.MENU, new TitleScreen());
-        // state.set(state.PLAY, new PlayScreen());
+        state.set(state.PLAY, new PlayScreen());
 
         // state.set(state.PLAY, new Stage1Screen());
         // state.set(state.PLAY, new Stage2Screen());
@@ -63,7 +63,7 @@ device.onReady(() => {
         pool.register("mainPlayer", PlayerEntity);
 
         // Start the game.
-        // state.change(state.PLAY, false);
-        state.change(101, false); // <--- Starts on Stage 1
+        state.change(state.PLAY, false);
+        // state.change(101, false); // <--- Starts on Stage 1
     });
 });
