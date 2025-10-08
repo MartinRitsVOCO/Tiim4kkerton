@@ -45,7 +45,7 @@ class PlayScreen extends me.Stage {
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-3D-printer") as HTMLImageElement);
 
         const background = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, this.gameSpeed);
-        
+
         me.game.world.addChild(background, 0);
 
         const groundHeight = 15;
@@ -70,9 +70,6 @@ class PlayScreen extends me.Stage {
         const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 40, this.gameSpeed, 160, 24);
         me.game.world.addChild(blocker, 30);
 
-        const collectable = new Collectable(viewportWidth, groundYPosition - 120, this.gameSpeed, "hammerBad", this.onCollection)
-        me.game.world.addChild(collectable, 40);
-
         // Stage Time
         this.finishTimerId = me.timer.setTimeout(() => {
             console.log("45 seconds passed. Finishing stage.");
@@ -80,7 +77,7 @@ class PlayScreen extends me.Stage {
             // me.state.change(GAME_FINISH_STATE);
         }, GAME_DURATION_MS)
         this.timerId = me.timer.setInterval(() => {
-            spawnCollectable(["tireBad", "dryerBad", "portfolioBad", "bunBad", "cameraBad", "hammerBad"], groundHeight, speed, this.onCollection)
+            spawnCollectable(["tireBad", "dryerBad", "portfolioBad", "bunBad", "cameraBad", "hammerBad"], groundHeight, this.gameSpeed, this.onCollection)
         }, 3000, true);
     }
 
@@ -89,7 +86,7 @@ class PlayScreen extends me.Stage {
             me.timer.clearTimeout(this.finishTimerId);
             this.finishTimerId = null;
         }
-      
+
         if (this.timerId !== null) {
             me.timer.clearInterval(this.timerId);
             this.timerId = null;
