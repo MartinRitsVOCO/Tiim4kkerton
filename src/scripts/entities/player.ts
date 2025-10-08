@@ -8,6 +8,8 @@ class PlayerEntity extends me.Entity {
     public static JUMP_VELOCITY = -20;
     public static DUCK_HEIGHT = 32;
 
+    private image: me.Sprite;
+
     private gravity: number = 0.9;
     private maxFallSpeed: number = 20;
 
@@ -20,6 +22,36 @@ class PlayerEntity extends me.Entity {
     constructor(x: number, groundY: number) {
         super(x / 2, groundY / 2, { width: PlayerEntity.PLAYER_WIDTH, height: PlayerEntity.PLAYER_HEIGHT, name: "player" });
         this.groundY = groundY / 2;
+
+        // Player sprite
+        const SVGimage = me.loader.getImage("player-texture");
+
+        const scaleFactor = 4;
+
+        // Offscreen canvas at high resolution
+        const offscreenCanvas = document.createElement("canvas");
+        offscreenCanvas.width = this.width * scaleFactor;
+        offscreenCanvas.height = this.height * scaleFactor;
+
+        const ctx = offscreenCanvas.getContext("2d")!;
+        ctx.imageSmoothingEnabled = true;
+
+        // Draw the SVG at 4× resolution
+        ctx.drawImage(SVGimage, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+        // Create a final canvas at your target size
+        const finalCanvas = document.createElement("canvas");
+        finalCanvas.width = this.width * 2;
+        finalCanvas.height = this.height * 2;
+
+        const finalCtx = finalCanvas.getContext("2d")!;
+        finalCtx.imageSmoothingEnabled = true;
+
+        // Draw the high-res offscreen canvas scaled down to final size
+        finalCtx.drawImage(offscreenCanvas, 0, 0, finalCanvas.width, finalCanvas.height);
+
+        // Create a sprite from the final canvas
+        this.image = new me.Sprite(-27, -28, { image: finalCanvas });
 
         this.body.setMaxVelocity(0, this.maxFallSpeed);
         this.body.setFriction(0, 0);
@@ -110,7 +142,7 @@ class PlayerEntity extends me.Entity {
         return false;
     }
 
-    public draw(renderer: me.Renderer) {
+    public draw(renderer: me.WebGLRenderer) {
 
         let color = new me.Color(0, 255, 0);
         if (this.isDucking) {
@@ -128,7 +160,18 @@ class PlayerEntity extends me.Entity {
             this.height
         );
 
-        renderer.stroke(rect, true);
+        //renderer.stroke(rect, true);
+
+        if (this.image) {
+
+            renderer.save();
+
+            renderer.translate(this.pos.x ?? 0, this.pos.y ?? 0);
+
+            this.image.draw(renderer);
+
+            renderer.restore();
+        }
     }
 
     public destroy(...args: any[]): void {
