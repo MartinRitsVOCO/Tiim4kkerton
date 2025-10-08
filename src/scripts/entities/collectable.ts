@@ -1,12 +1,14 @@
 import * as me from "melonjs";
 import ResponseObject from "melonjs/dist/types/physics/response";
+import collectables from "../constants/collectables";
+type collectTypes = keyof typeof collectables;
 
 class Collectable extends me.Entity {
-  public type: string;
+  public type: collectTypes;
   public speed: number;
   private onCollect: Function;
 
-  constructor(x: number, y: number, speed: number, type: string, onCollect: Function, width = 16, height = 16) {
+  constructor(x: number, y: number, speed: number, type: collectTypes, onCollect: Function, width = 16, height = 16) {
     super(x / 2, y / 2, { width: width, height: height, name: "player" })
 
     this.type = type;
@@ -14,7 +16,7 @@ class Collectable extends me.Entity {
     this.onCollect = onCollect;
 
     this.anchorPoint.set(1, 0);
-    this.body.addShape(new me.Rect(0, 0, this.width, this.height));
+    this.body.addShape(new me.Rect(0, 0, collectables[type].width, collectables[type].height));
     this.body.collisionType = me.collision.types.COLLECTABLE_OBJECT;
     this.body.collisionMask = me.collision.types.PLAYER_OBJECT;
     this.body.setFriction(0, 0);

@@ -8,9 +8,7 @@ class PlayScreen extends me.Stage {
     onCollection(type: string) {
         console.log(type)
     }
-  
-    private background: me.Renderable | null = null;
-  
+
 
     /**
      *  action to perform on state change
@@ -28,7 +26,7 @@ class PlayScreen extends me.Stage {
         const image = me.loader.getImage("background") as HTMLImageElement;
 
         const background = new ScrollingBackground(viewportWidth, viewportHeight, image, speed);
-        
+
         me.game.world.addChild(background, 0);
 
         const groundHeight = 15;
@@ -53,7 +51,7 @@ class PlayScreen extends me.Stage {
         const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 40, speed, 160, 24);
         me.game.world.addChild(blocker, 30);
 
-        const collectable = new Collectable(viewportWidth, groundYPosition - 120, 1, "hammer", this.onCollection)
+        const collectable = new Collectable(viewportWidth, groundYPosition - 120, 1, "hammerBad", this.onCollection)
         me.game.world.addChild(collectable, 40);
     }
 };
