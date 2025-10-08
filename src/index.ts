@@ -1,69 +1,46 @@
 import { audio, loader, state, device, video, plugin, pool, input } from "melonjs";
-import * as me from "melonjs";
 import TitleScreen from "./scripts/stage/title.js";
-// import PlayScreen from "./scripts/stage/play.js";
+import PlayScreen from "./scripts/stage/play.js";
 import PlayerEntity from "./scripts/entities/player.js";
 import DataManifest from "./manifest.js";
 import "./index.scss"
 
-// Test stage1.ts jaoks
-import Stage1Screen from "./scripts/stage/stage1.js";
-import Stage2Screen from "./scripts/stage/stage2.js";
-import Stage3Screen from "./scripts/stage/stage3.js";
-import Stage4Screen from "./scripts/stage/stage4.js";
-import Stage5Screen from "./scripts/stage/stage5.js";
-import Stage6Screen from "./scripts/stage/stage6.js";
-import Stage7Screen from "./scripts/stage/stage7.js";
+
+
 
 device.onReady(() => {
 
-    // initialize the display canvas once the device/browser is ready
-    if (!video.init(1218, 562, { parent: "screen", scale: "auto" })) {
-        alert("Your browser does not support HTML5 canvas.");
-        return;
-    }
+  // initialize display canvas
+  if (!me.video.init(1218, 562, { parent: "screen", scale: "auto" })) {
+    alert("Sinu brauser ei toeta HTML5 canvas't");
+    return;
+  }
 
-    // Initialize the audio.
-    audio.init("mp3,ogg");
+  // initialize audio
+  me.audio.init("mp3,ogg");
 
-    // allow cross-origin for image/texture loading
-    loader.setOptions({ crossOrigin: "anonymous" });
+  // allow cross-origin for images
+  me.loader.setOptions({ crossOrigin: "anonymous" });
 
-    // initialize the debug plugin in development mode.
-    if (process.env.NODE_ENV === 'development') {
-        import("@melonjs/debug-plugin").then((debugPlugin) => {
-            // automatically register the debug panel
-            plugin.register(new debugPlugin.DebugPanelPlugin, "debugPanel");
-        });
-    }
-
-    input.bindKey(input.KEY.UP, "jump", true);
-    input.bindKey(input.KEY.UP, "jump", false);
-    input.bindKey(input.KEY.DOWN, "duck", true);
-    input.bindKey(input.KEY.DOWN, "duck", false);
+  // bind keys
+    me.input.bindKey(me.input.KEY.UP, "jump", true);
+    me.input.bindKey(me.input.KEY.UP, "jump", false);
+    me.input.bindKey(me.input.KEY.DOWN, "duck", true);
+    me.input.bindKey(me.input.KEY.DOWN, "duck", false);
 
     // set and load all resources.
     loader.preload(DataManifest, function () {
         // set the user defined game stages
         state.set(state.MENU, new TitleScreen());
-        // state.set(state.PLAY, new PlayScreen());
-
-        // state.set(state.PLAY, new Stage1Screen());
-        // state.set(state.PLAY, new Stage2Screen());
-        // state.set(state.PLAY, new Stage3Screen());
-        // state.set(state.PLAY, new Stage4Screen());
-        // state.set(state.PLAY, new Stage5Screen());
-        // state.set(state.PLAY, new Stage6Screen());
-        // state.set(state.PLAY, new Stage7Screen());
-
-        state.set(101, new Stage1Screen());
-        state.set(102, new Stage2Screen());
+        state.set(state.PLAY, new PlayScreen());
 
         // add our player entity in the entity pool
         pool.register("mainPlayer", PlayerEntity);
 
         // Start the game.
-        // state.change(state.PLAY, false);
-        state.change(101, false); // <--- Starts on Stage 1
+        state.change(state.PLAY, false);
     });
-});
+  } */
+
+
+})});
