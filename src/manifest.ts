@@ -82,6 +82,12 @@ const DataManifest = [
     { name: "collectable-positive-Laptophalo", type: "image", src: "/data/img/collectable/positive/Laptophalo.png" },
     { name: "collectable-positive-Portfellhalo", type: "image", src: "/data/img/collectable/positive/Portfellhalo.png" },
     { name: "collectable-positive-Saiakehalo", type: "image", src: "/data/img/collectable/positive/Saiakehalo.png" },
+
+    // Blockers
+    { name: "blocker-bench", type: "image", src: "/data/img/blockers/pingid.png" },
+    { name: "blocker-printer", type: "image", src: "/data/img/blockers/printer.png" },
+    { name: "blocker-trashbin", type: "image", src: "/data/img/blockers/trashbins.png" },
+    
 ];
 
 export default DataManifest;
