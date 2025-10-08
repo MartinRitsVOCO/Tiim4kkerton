@@ -16,7 +16,7 @@ class PlayScreen extends me.Stage {
     private finishTimerId: number | null = null;
     private gameSpeed: number = 2;
 
-    onCollection(type: string) {
+    onCollection(type: string, wasGood: boolean, wasCollected: boolean) {
         console.log(type)
     }
 
