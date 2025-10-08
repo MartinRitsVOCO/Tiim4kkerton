@@ -30,7 +30,7 @@ class PlayScreen extends me.Stage {
 
         me.game.world.addChild(player, 50)
 
-        const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 48, 1);
+        const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 40, 2, 160, 24);
         me.game.world.addChild(blocker, 30);
     }
 };

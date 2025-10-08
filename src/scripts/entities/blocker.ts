@@ -3,10 +3,10 @@ import ResponseObject from "melonjs/dist/types/physics/response";
 
 export default class BlockerEntity extends me.Entity {
   public startX: number = 0;
-  public constructor(x: number, y: number, speed: number) {
+  public constructor(x: number, y: number, speed: number, width: number, height: number) {
     super(x, y / 2 - 24, {
-      width: 96,
-      height: 24,
+      width: width,
+      height: height,
       name: "blocker",
     });
     this.startX = x;
