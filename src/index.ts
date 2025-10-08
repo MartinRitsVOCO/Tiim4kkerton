@@ -1,4 +1,5 @@
 import { audio, loader, state, device, video, plugin, pool, input } from "melonjs";
+import * as me from "melonjs";
 import TitleScreen from "./scripts/stage/title.js";
 // import PlayScreen from "./scripts/stage/play.js";
 import PlayerEntity from "./scripts/entities/player.js";
@@ -49,16 +50,20 @@ device.onReady(() => {
 
         // state.set(state.PLAY, new Stage1Screen());
         // state.set(state.PLAY, new Stage2Screen());
-        state.set(state.PLAY, new Stage3Screen());
+        // state.set(state.PLAY, new Stage3Screen());
         // state.set(state.PLAY, new Stage4Screen());
         // state.set(state.PLAY, new Stage5Screen());
         // state.set(state.PLAY, new Stage6Screen());
         // state.set(state.PLAY, new Stage7Screen());
 
+        state.set(101, new Stage1Screen());
+        state.set(102, new Stage2Screen());
+
         // add our player entity in the entity pool
         pool.register("mainPlayer", PlayerEntity);
 
         // Start the game.
-        state.change(state.PLAY, false);
+        // state.change(state.PLAY, false);
+        state.change(101, false); // <--- Starts on Stage 1
     });
 });
