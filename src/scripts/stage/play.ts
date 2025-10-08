@@ -2,12 +2,14 @@ import * as me from "melonjs";
 import PlayerEntity from "../entities/player";
 import BlockerEntity from "../entities/blocker";
 import ScrollingBackground from "../renderables/background";
-import Collectable from "../entities/collectable";
+import spawnCollectable from "../util/spawnCollectable";
 
 class PlayScreen extends me.Stage {
     onCollection(type: string) {
         console.log(type)
     }
+
+    private timerId: number = 0;
 
 
     /**
@@ -27,14 +29,14 @@ class PlayScreen extends me.Stage {
         const imagePool = [];
         // Default 'empty' background:
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-tühi-taust") as HTMLImageElement);
-        
+
         // Background variations:
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-postrite-sein") as HTMLImageElement);
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-arvutiklass") as HTMLImageElement);
         imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-3D-printer") as HTMLImageElement);
 
         const background = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, speed);
-        
+
         me.game.world.addChild(background, 0);
 
         const groundHeight = 15;
@@ -59,8 +61,14 @@ class PlayScreen extends me.Stage {
         const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 40, speed, 160, 24);
         me.game.world.addChild(blocker, 30);
 
-        const collectable = new Collectable(viewportWidth, groundYPosition - 120, 1, "hammerBad", this.onCollection)
-        me.game.world.addChild(collectable, 40);
+        this.timerId = me.timer.setInterval(() => {
+            spawnCollectable(["tireBad", "dryerBad", "portfolioBad", "bunBad", "cameraBad", "hammerBad"], groundHeight, speed, this.onCollection)
+        }, 3000, true);
+    }
+
+    onDestroyEvent(...args: any[]): void {
+        me.timer.clearInterval(this.timerId);
+        super.onDestroyEvent(...args);
     }
 };
 
