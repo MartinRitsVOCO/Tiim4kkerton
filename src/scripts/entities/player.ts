@@ -15,7 +15,6 @@ class PlayerEntity extends me.Entity {
 
     private isJumping: boolean = false;
     private isDucking: boolean = false;
-    private isGrounded: boolean = false;
 
     private groundY: number = 0;
 
@@ -106,10 +105,6 @@ class PlayerEntity extends me.Entity {
             this.duckEnd();
         }
 
-        // if (this.pos.y! < this.groundY - this.height / 2) {
-        //     this.body.vel.y! += this.gravity;
-        // }
-
         if (this.pos.y! > this.groundY - this.height / 2) {
             this.isJumping = false;
             this.pos.y = this.groundY - this.height / 2;
@@ -123,8 +118,7 @@ class PlayerEntity extends me.Entity {
 
     onCollision(response: ResponseObject, other: me.Entity): boolean {
         if (response.b.body.collisionType === me.collision.types.WORLD_SHAPE) {
-            if (this.body.falling &&
-                !me.input.isKeyPressed("down") &&
+            if (
                 // Shortest overlap would move the player upward
                 (response.overlapV.y! > 0) &&
                 // The velocity is reasonably fast enough to have penetrated to the overlap depth
