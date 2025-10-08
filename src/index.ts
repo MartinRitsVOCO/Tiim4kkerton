@@ -31,6 +31,7 @@ device.onReady(() => {
     }
 
     input.bindKey(input.KEY.UP, "jump", true);
+    input.bindKey(input.KEY.UP, "jump", false);
     input.bindKey(input.KEY.DOWN, "duck", true);
     input.bindKey(input.KEY.DOWN, "duck", false);
 
