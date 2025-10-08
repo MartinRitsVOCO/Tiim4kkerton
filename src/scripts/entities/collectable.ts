@@ -8,8 +8,8 @@ class Collectable extends me.Entity {
   public speed: number;
   private onCollect: Function;
 
-  constructor(x: number, y: number, speed: number, type: collectTypes, onCollect: Function, width = 16, height = 16) {
-    super(x / 2, y / 2, { width: width, height: height, name: "player" })
+  constructor(x: number, y: number, speed: number, type: collectTypes, onCollect: Function) {
+    super(x / 2, y / 2, { width: collectables[type].width, height: collectables[type].height, name: "player" })
 
     this.type = type;
     this.speed = speed;
@@ -25,7 +25,10 @@ class Collectable extends me.Entity {
   }
 
   update(dt: any): boolean {
-
+    if (this.pos.x! + this.width < 5) {
+      this.onCollect(this.type, collectables[this.type].good, false)
+      me.game.world.removeChild(this)
+    }
     return true
   }
 
@@ -46,7 +49,7 @@ class Collectable extends me.Entity {
 
   onCollision(response: ResponseObject): boolean {
     if (response.b.body.collisionType == me.collision.types.PLAYER_OBJECT) {
-      this.onCollect(this.type)
+      this.onCollect(this.type, collectables[this.type].good, true)
       me.game.world.removeChild(this)
     }
 
