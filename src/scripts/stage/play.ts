@@ -18,15 +18,23 @@ class PlayScreen extends me.Stage {
         const viewportWidth = me.game.viewport.width;
         const viewportHeight = me.game.viewport.height;
 
-        const speed = 1;
+        const speed = 2;
 
         // add a color layer background to the default Stage
         me.game.world.addChild(new me.ColorLayer("background", "#b82e2eff"), -1);
 
-        const image = me.loader.getImage("background") as HTMLImageElement;
+        // background images
+        const imagePool = [];
+        // Default 'empty' background:
+        imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-tühi-taust") as HTMLImageElement);
+        
+        // Background variations:
+        imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-postrite-sein") as HTMLImageElement);
+        imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-arvutiklass") as HTMLImageElement);
+        imagePool.push(me.loader.getImage("bg-it-IT-akadeemia-taust-3D-printer") as HTMLImageElement);
 
-        const background = new ScrollingBackground(viewportWidth, viewportHeight, image, speed);
-
+        const background = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, speed);
+        
         me.game.world.addChild(background, 0);
 
         const groundHeight = 15;
