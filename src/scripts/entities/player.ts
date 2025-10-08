@@ -7,6 +7,7 @@ class PlayerEntity extends me.Entity {
     public static PLAYER_WIDTH = 48;
     public static JUMP_VELOCITY = -20;
     public static DUCK_HEIGHT = 32;
+    public static MAX_JUMP_DURATION = 250;
 
     private image: me.Sprite;
 
@@ -14,6 +15,7 @@ class PlayerEntity extends me.Entity {
     private maxFallSpeed: number = 20;
 
     private isJumping: boolean = false;
+    private jumpTimer: number = 0;
     private isDucking: boolean = false;
 
     private groundY: number = 0;
@@ -54,7 +56,7 @@ class PlayerEntity extends me.Entity {
         // Create a sprite from the final canvas
         this.image = new me.Sprite(-27, -28, { image: finalCanvas });
 
-        this.body.setMaxVelocity(10, this.maxFallSpeed);
+        this.body.setMaxVelocity(15, this.maxFallSpeed);
         this.body.setFriction(0.5, 0);
 
         this.body.setCollisionMask(me.collision.types.ALL_OBJECT);
@@ -71,7 +73,8 @@ class PlayerEntity extends me.Entity {
     private jump() {
         if (!this.isDucking && (Math.abs(this.body.vel.y!) < 0.9)) {
             this.isJumping = true;
-            this.body.force.y = PlayerEntity.JUMP_VELOCITY;
+            this.jumpTimer = 0;
+            this.body.force.y = PlayerEntity.JUMP_VELOCITY / 4;
         }
     }
 
@@ -86,11 +89,28 @@ class PlayerEntity extends me.Entity {
         const shape = new me.Rect(0, 0, this.width / 2, this.height / 2);
         this.body.addShape(shape);
         this.pos.y! += (PlayerEntity.PLAYER_HEIGHT - PlayerEntity.DUCK_HEIGHT) / 2;
+
+        if (this.pos.x! - this.startX < 250) {
+            this.body.force.x = 15;
+        }
     }
 
     private checkOverhead(): boolean {
         const vectorStart = new me.Vector2d(this.pos.x, this.pos.y)
         const vectorEnd = new me.Vector2d(this.pos.x! + 10, this.pos.y! - (PlayerEntity.PLAYER_HEIGHT - PlayerEntity.DUCK_HEIGHT) / 2)
+        const collisionResults = me.collision.rayCast(new me.Line(0, 0, [vectorStart, vectorEnd]))
+        for (const res of collisionResults) {
+            if (res.body.collisionType == me.collision.types.WORLD_SHAPE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private checkUnder(): boolean {
+        const vectorStart = new me.Vector2d(this.pos.x, this.pos.y)
+        const vectorEnd = new me.Vector2d(this.pos.x, this.pos.y! + this.height / 2)
         const collisionResults = me.collision.rayCast(new me.Line(0, 0, [vectorStart, vectorEnd]))
         for (const res of collisionResults) {
             if (res.body.collisionType == me.collision.types.WORLD_SHAPE) {
@@ -117,8 +137,18 @@ class PlayerEntity extends me.Entity {
 
     public update(dt: number): boolean {
         if (me.input.isKeyPressed("jump")) {
-            this.jump();
+            if (!this.isJumping) {
+                this.jump();
+            } else if (this.body.vel.y! <= 0.9 && this.jumpTimer < PlayerEntity.MAX_JUMP_DURATION) {
+                this.jumpTimer += dt;
+                if (this.jumpTimer <= PlayerEntity.MAX_JUMP_DURATION) {
+                    this.body.force.y! = (PlayerEntity.JUMP_VELOCITY * (dt / 1000) * 4);
+                }
+            }
+        } else if (this.body.vel.y! <= 0.9) {
+            this.jumpTimer = PlayerEntity.MAX_JUMP_DURATION;
         }
+
         if (me.input.isKeyPressed("duck")) {
             if (!this.isDucking) {
                 this.duckStart();
@@ -132,12 +162,18 @@ class PlayerEntity extends me.Entity {
             this.pos.y = this.groundY - this.height / 2;
             this.body.vel.y = 0;
         } else if (this.pos.y! < 1) {
-            this.body.vel.y = 1;
+            if (this.body.vel.y! < 1) {
+                this.body.vel.y = 1;
+            } else {
+                this.body.force.y = 1
+            }
+        } else if (this.checkUnder() && (Math.abs(this.body.vel.y!) < 0.9)) {
+            this.isJumping = false;
         }
 
         if (this.pos.x! - this.startX < -3) {
             this.body.force.x = 1
-        } else if (this.pos.x! - this.startX > 3) {
+        } else if (this.pos.x! - this.startX > 3 && !this.isDucking) {
             this.body.force.x = -1
         }
 
