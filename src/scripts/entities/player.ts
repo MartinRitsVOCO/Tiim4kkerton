@@ -67,13 +67,16 @@ class PlayerEntity extends me.Entity {
     }
 
     private jump() {
-        if (!this.isDucking) {
+        if (!this.isDucking && (Math.abs(this.body.vel.y!) < 0.9)) {
             this.isJumping = true;
             this.body.force.y = PlayerEntity.JUMP_VELOCITY;
         }
     }
 
     private duckStart() {
+        if ((Math.abs(this.body.vel.y!) > 0.9)) {
+            return;
+        }
         this.isDucking = true;
 
         this.height = PlayerEntity.DUCK_HEIGHT;
