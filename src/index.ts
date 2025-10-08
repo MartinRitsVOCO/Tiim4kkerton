@@ -1,12 +1,19 @@
 import { audio, loader, state, device, video, plugin, pool, input } from "melonjs";
+import * as me from "melonjs";
 import TitleScreen from "./scripts/stage/title.js";
-import PlayScreen from "./scripts/stage/play.js";
+// import PlayScreen from "./scripts/stage/play.js";
 import PlayerEntity from "./scripts/entities/player.js";
 import DataManifest from "./manifest.js";
 import "./index.scss"
 
-
-
+// Test stage1.ts jaoks
+import Stage1Screen from "./scripts/stage/stage1.js";
+import Stage2Screen from "./scripts/stage/stage2.js";
+import Stage3Screen from "./scripts/stage/stage3.js";
+import Stage4Screen from "./scripts/stage/stage4.js";
+import Stage5Screen from "./scripts/stage/stage5.js";
+import Stage6Screen from "./scripts/stage/stage6.js";
+import Stage7Screen from "./scripts/stage/stage7.js";
 
 device.onReady(() => {
 
@@ -39,12 +46,24 @@ device.onReady(() => {
     loader.preload(DataManifest, function () {
         // set the user defined game stages
         state.set(state.MENU, new TitleScreen());
-        state.set(state.PLAY, new PlayScreen());
+        // state.set(state.PLAY, new PlayScreen());
+
+        // state.set(state.PLAY, new Stage1Screen());
+        // state.set(state.PLAY, new Stage2Screen());
+        // state.set(state.PLAY, new Stage3Screen());
+        // state.set(state.PLAY, new Stage4Screen());
+        // state.set(state.PLAY, new Stage5Screen());
+        // state.set(state.PLAY, new Stage6Screen());
+        // state.set(state.PLAY, new Stage7Screen());
+
+        state.set(101, new Stage1Screen());
+        state.set(102, new Stage2Screen());
 
         // add our player entity in the entity pool
         pool.register("mainPlayer", PlayerEntity);
 
         // Start the game.
-        state.change(state.PLAY, false);
+        // state.change(state.PLAY, false);
+        state.change(101, false); // <--- Starts on Stage 1
     });
 });

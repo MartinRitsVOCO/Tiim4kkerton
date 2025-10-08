@@ -9,7 +9,7 @@ import spawnCollectable from "../util/spawnCollectable";
 // If you don't have a MENU state, you must set one up in your game's initialization.
 // const GAME_FINISH_STATE = me.state.MENU;
 
-const GAME_DURATION_MS = 4500; // 45 seconds in milliseconds
+const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
 
 class PlayScreen extends me.Stage {
     // Property to hold the ID of the timeout so we can cancel it if needed
@@ -76,9 +76,6 @@ class PlayScreen extends me.Stage {
             // Stop the game and switch to the defined finish state
             // me.state.change(GAME_FINISH_STATE);
         }, GAME_DURATION_MS)
-        this.timerId = me.timer.setInterval(() => {
-            spawnCollectable(["tireBad", "dryerBad", "portfolioBad", "bunBad", "cameraBad", "hammerBad"], groundHeight, this.gameSpeed, this.onCollection)
-        }, 3000, true);
     }
 
     onDestroyEvent(...args: any[]): void {
@@ -87,10 +84,6 @@ class PlayScreen extends me.Stage {
             this.finishTimerId = null;
         }
 
-        if (this.timerId !== null) {
-            me.timer.clearInterval(this.timerId);
-            this.timerId = null;
-        }
         super.onDestroyEvent(...args);
     }
 };
