@@ -120,6 +120,13 @@ const DataManifest = [
     { name: "ilu_valevastus", type: "image", src: "/data/img/margit/ilu_valevastus.png" },
     { name: "ilu_oigevastus", type: "image", src: "/data/img/margit/ilu_oigevastus.png" }
 
+    // Player
+    { name: "Sideview", type: "image", src: "/data/img/player/walk/Sideview.png" },
+    // { name: "player-leftleg", type: "image", src: "/data/img/player/walk/vasakjalgyleval.png" },
+
+    // texturePacker
+    { name: "texture", type: "json", src: "data/img/player/texture.json" },
+    { name: "texture", type: "image", src: "data/img/player/texture.png" },
 ];
 
 export default DataManifest;

@@ -9,22 +9,25 @@ import { ARIKYSIMUS, EHITUSKYSIMUS, ILUKYSIMUS, TOITKYSIMUS, TURISMKYSIMUS, ITKY
 // If you don't have a MENU state, you must set one up in your game's initialization.
 // const GAME_FINISH_STATE = me.state.MENU;
 
-const GAME_TRANSITION_DELAY_MS = 2000; 
+const GAME_TRANSITION_DELAY_MS = 2000;
 
-const GAME_DURATION_MS = 10000; // 45 seconds in milliseconds
+const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
+type StageConstructor = new () => me.Stage;
 
 class BasePlayScreen extends me.Stage {
     protected config: StageConfig;
     protected finishTimerId: number | null = null;
+    protected nextStageId?: number; // hoiab järgmise stage state ID
 
     // References to moving objects
     protected scrollingBackground: ScrollingBackground | null = null;
     protected ground: me.Renderable | null = null;
     protected player: PlayerEntity | null = null;
 
-    constructor(config: StageConfig) {
+    constructor(config: StageConfig, nextStageId?: number) {
         super();
         this.config = config;
+        this.nextStageId = nextStageId;
     }
     preload(){
     // Intentionally left empty: resource loading should happen in onResetEvent
@@ -48,7 +51,7 @@ class BasePlayScreen extends me.Stage {
 
         // Map the image keys to actual HTMLImageElement objects using me.loader.getImage()
         const backgroundKeys = this.config.backgroundKeys;
-        const imagePool: HTMLImageElement[] = backgroundKeys.map(key => 
+        const imagePool: HTMLImageElement[] = backgroundKeys.map(key =>
             me.loader.getImage(key) as HTMLImageElement
         );
 

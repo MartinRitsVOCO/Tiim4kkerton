@@ -1,4 +1,7 @@
-import { audio, loader, state, device, video, pool, input } from "melonjs";
+import { audio, loader, state, device, video, plugin, pool, input } from "melonjs";
+import * as me from "melonjs";
+import TitleScreen from "./scripts/stage/title.js";
+import PlayScreen from "./scripts/stage/play.js";
 import PlayerEntity from "./scripts/entities/player.js";
 import DataManifest from "./manifest.js";
 import "./index.scss";
@@ -55,6 +58,8 @@ import Stage4Screen from "./scripts/stage/stage4.js";
 import Stage5Screen from "./scripts/stage/stage5.js";
 import Stage6Screen from "./scripts/stage/stage6.js";
 import Stage7Screen from "./scripts/stage/stage7.js";
+
+export let texture: me.TextureAtlas;
 
 device.onReady(() => {
   // initialize display canvas

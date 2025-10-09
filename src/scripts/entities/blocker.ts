@@ -1,17 +1,20 @@
 import * as me from "melonjs";
-import ResponseObject from "melonjs/dist/types/physics/response";
+import blockers from "../constants/blockers";
+type blockerTypes = typeof blockers[keyof typeof blockers];
 
 export default class BlockerEntity extends me.Entity {
-  public startX: number = 0;
-  public constructor(x: number, y: number, speed: number, width: number, height: number) {
-    super(x, y / 2 - 24, {
-      width: width,
-      height: height,
+  //public startX: number = 0;
+  private blockerType: blockerTypes;
+  public constructor(viewportWidth: number, groundYPosition: number, speed: number, type: keyof typeof blockers,) {
+    super(viewportWidth, groundYPosition / 2 - blockers[type].fromGround - 24, {
+      width: blockers[type].width,
+      height: blockers[type].visualHeight,
       name: "blocker",
     });
-    this.startX = x;
+    this.blockerType = blockers[type];
+    //this.startX = x;
     this.anchorPoint.set(1, 0);
-    this.body.addShape(new me.Rect(0, 0, this.width, this.height));
+    this.body.addShape(new me.Rect(0, 0, this.width, this.blockerType.height));
     this.body.collisionType = me.collision.types.WORLD_SHAPE;
     this.body.collisionMask = me.collision.types.PLAYER_OBJECT;
     this.body.setFriction(0, 0);
@@ -22,7 +25,8 @@ export default class BlockerEntity extends me.Entity {
 
   update(dt: any): boolean {
     if (this.pos.x! + this.width < 0) {
-      this.pos.x = this.startX;
+      //this.pos.x = this.startX;
+      me.game.world.removeChild(this);
     }
 
     return true
