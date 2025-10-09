@@ -11,7 +11,7 @@ if (!STAGE_CONFIG) {
 }
 
 const collectablePool: collectTypes[] = [
-    "tireBad", "laptopGood",
+    "tireBad", "laptopBad", "dryerGood", "hammerBad", "cameraBad", "portfolioBad", "bunBad"
 ];
 
 /**

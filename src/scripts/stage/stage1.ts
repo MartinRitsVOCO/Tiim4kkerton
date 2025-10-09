@@ -16,7 +16,7 @@ if (!STAGE_CONFIG) {
  */
 
 const collectablePool: collectTypes[] = [
-    "tireBad", "laptopGood",
+    "tireGood", "laptopBad", "dryerBad", "hammerBad", "cameraBad", "portfolioBad", "bunBad"
 ];
 
 class Stage1Screen extends BasePlayScreen {
