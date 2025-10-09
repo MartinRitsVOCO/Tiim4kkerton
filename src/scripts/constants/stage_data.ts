@@ -13,7 +13,7 @@ export const STAGE_CONFIGS: StageConfig[] = [
         name: "Stage 1: Tehnikakool",
         gameSpeed: 1,
         backgroundKeys: [
-            "bg-tehnika-Tehnikakooli-tühi-taust",
+            "bg-tehnika-Tehnikakooli-tuhi-taust",
             "bg-tehnika-Tehnikakool-1osa",
             "bg-tehnika-Tehnikakool-2osa",
             "bg-tehnika-Tehnikakooli-motoka-taust",
@@ -24,10 +24,10 @@ export const STAGE_CONFIGS: StageConfig[] = [
         name: "Stage 2: Ärikool",
         gameSpeed: 2,
         backgroundKeys: [
-            "bg-business-Ärikooli-tühi-taust",
-            "bg-business-Ärikool-1osa",
-            "bg-business-Ärikool-2osa",
-            "bg-business-Ärikool-3osa",
+            "bg-business-Arikooli-tuhi-taust",
+            "bg-business-Arikool-1osa",
+            "bg-business-Arikool-2osa",
+            "bg-business-Arikool-3osa",
         ],
     },
     // Stage 3: Ehitus
@@ -35,7 +35,7 @@ export const STAGE_CONFIGS: StageConfig[] = [
         name: "Stage 3: Ehitus",
         gameSpeed: 3,
         backgroundKeys: [
-            "bg-ehitus-Ehituse-tühi-taust",
+            "bg-ehitus-Ehituse-tuhi-taust",
             "bg-ehitus-Ehituse-taust-1osa",
             "bg-ehitus-Ehituse-taust-2osa",
             "bg-ehitus-Ehituse-taust-3osa",
@@ -47,10 +47,10 @@ export const STAGE_CONFIGS: StageConfig[] = [
         name: "Stage 4: Ilukool",
         gameSpeed: 4,
         backgroundKeys: [
-            "bg-ilu-Ilukooli-tühitaust",
+            "bg-ilu-Ilukooli-tuhitaust",
             "bg-ilu-Ilukooli-juuksur-tatsu",
             "bg-ilu-Ilukooli-meikarid",
-            "bg-ilu-Ilukooli-õmblusosak",
+            "bg-ilu-Ilukooli-omblusosak",
         ],
     },
     // Stage 5: Toidu
@@ -58,9 +58,9 @@ export const STAGE_CONFIGS: StageConfig[] = [
         name: "Stage 5: Toidukool",
         gameSpeed: 5,
         backgroundKeys: [
-            "bg-toidu-Toidukooli-tühi-taust",
+            "bg-toidu-Toidukooli-tuhi-taust",
             "bg-toidu-Toidukool-kohvimasina-osa",
-            "bg-toidu-Toidukool-läbipaistvad-uksed-osa",
+            "bg-toidu-Toidukool-labipaistvad-uksed-osa",
             "bg-toidu-Toidukool-toidukapiga-osa",
         ],
     },
@@ -69,7 +69,7 @@ export const STAGE_CONFIGS: StageConfig[] = [
         name: "Stage 6: Turismikool",
         gameSpeed: 6,
         backgroundKeys: [
-            "bg-turism-Turismikooli-tühi-taust",
+            "bg-turism-Turismikooli-tuhi-taust",
             "bg-turism-Turismikool-taust-2",
             "bg-turism-Turismikool-taust-lennukiga",
             "bg-turism-Turismikool-taust-riiuliga",
@@ -80,7 +80,7 @@ export const STAGE_CONFIGS: StageConfig[] = [
         name: "Stage 7: IT Akadeemia",
         gameSpeed: 7,
         backgroundKeys: [
-            "bg-it-IT-akadeemia-tühi-taust", 
+            "bg-it-IT-akadeemia-tuhi-taust", 
             "bg-it-IT-akadeemia-taust-postrite-sein",
             "bg-it-IT-akadeemia-taust-arvutiklass",
             "bg-it-IT-akadeemia-taust-3D-printer",

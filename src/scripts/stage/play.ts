@@ -1,3 +1,7 @@
+
+
+
+
 import * as me from "melonjs";
 import PlayerEntity from "../entities/player";
 import ScrollingBackground from "../renderables/background";
@@ -37,8 +41,7 @@ class PlayScreen extends me.Stage {
 
 
     /**
-     *  action to perform on state change
-     */
+     *  action to perform on state change */
 
     private collectablePool: collectTypes[] = [
         "tireBad",
@@ -128,3 +131,4 @@ class PlayScreen extends me.Stage {
 };
 
 export default PlayScreen;
+
