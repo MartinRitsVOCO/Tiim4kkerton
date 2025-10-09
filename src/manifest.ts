@@ -87,7 +87,14 @@ const DataManifest = [
     { name: "blocker-bench", type: "image", src: "/data/img/blockers/pingid.png" },
     { name: "blocker-printer", type: "image", src: "/data/img/blockers/printer.png" },
     { name: "blocker-trashbin", type: "image", src: "/data/img/blockers/trashbins.png" },
-    
+
+    // Player
+    { name: "Sideview", type: "image", src: "/data/img/player/walk/Sideview.png" },
+    // { name: "player-leftleg", type: "image", src: "/data/img/player/walk/vasakjalgyleval.png" },
+
+    // texturePacker
+    { name: "texture", type: "json", src: "data/img/player/texture.json" },
+    { name: "texture", type: "image", src: "data/img/player/texture.png" },
 ];
 
 export default DataManifest;
