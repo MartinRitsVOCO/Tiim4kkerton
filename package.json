@@ -8,7 +8,7 @@
     "@types/node": "^20.12.7",
     "sass": "^1.75.0",
     "typescript": "^5.9.3",
-    "vite": "^5.2.8",
+    "vite": "^7.1.9",
     "vite-plugin-favicons-inject": "^2.2.0",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-static-copy": "^1.0.2"
