@@ -3,6 +3,10 @@ import PlayerEntity from "../entities/player";
 import ScrollingBackground from "../renderables/background";
 import { StageConfig } from "../constants/stage_data";
 import { ARIKYSIMUS, EHITUSKYSIMUS, ILUKYSIMUS, TOITKYSIMUS, TURISMKYSIMUS, ITKYSIMUS } from "../..";
+import spawnBlocker from "../util/spawnBlocker";
+import spawnCollectable from "../util/spawnCollectable";
+import collectables from "../constants/collectables";
+type collectTypes = keyof typeof collectables;
 
 // Define a new state to switch to when the game is over. 
 // Assuming you have a MENU state, or you could define a dedicated GAME_OVER state.
@@ -10,6 +14,7 @@ import { ARIKYSIMUS, EHITUSKYSIMUS, ILUKYSIMUS, TOITKYSIMUS, TURISMKYSIMUS, ITKY
 // const GAME_FINISH_STATE = me.state.MENU;
 
 const GAME_TRANSITION_DELAY_MS = 2000;
+const COLLECTABLE_SPAWN_DELAY_MS = 4000;
 
 const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
 type StageConstructor = new () => me.Stage;
@@ -19,18 +24,54 @@ class BasePlayScreen extends me.Stage {
     protected finishTimerId: number | null = null;
     protected nextStageId?: number; // hoiab järgmise stage state ID
 
+    protected maxSpawnDelay = COLLECTABLE_SPAWN_DELAY_MS * 1.5;
+    protected minSpawnDelay = COLLECTABLE_SPAWN_DELAY_MS * 0.66;
+
+    protected groundHeight = 45;
+    protected collectableTimerId: number | null = null;
+
     // References to moving objects
     protected scrollingBackground: ScrollingBackground | null = null;
     protected ground: me.Renderable | null = null;
-    protected player: PlayerEntity | null = null;
+    protected player: PlayerEntity | null = null
 
-    constructor(config: StageConfig, nextStageId?: number) {
+    protected collectablePool: collectTypes[];
+
+    onCollection(type: string, wasGood: boolean, wasCollected: boolean) {
+        console.log(type)
+    }
+
+    private spawnCollectablesLoop() {
+
+        let newSpawnDelay = Math.floor(Math.random() * (this.maxSpawnDelay - this.minSpawnDelay + 1)) + this.minSpawnDelay;
+
+        if (Math.random() < 0.5) {
+            spawnBlocker(this.groundHeight, this.config.gameSpeed);
+        }
+
+        // 1. Call the utility function to spawn a collectable
+        spawnCollectable(
+            this.collectablePool,
+            this.groundHeight,
+            this.config.gameSpeed,
+            this.onCollection.bind(this) // Pass the stage's handler function
+        );
+
+        // 2. Schedule the timer for the next spawn
+        this.collectableTimerId = me.timer.setTimeout(
+            () => this.spawnCollectablesLoop(),
+            newSpawnDelay
+        );
+    }
+
+    constructor(config: StageConfig, collectablePool: collectTypes[], nextStageId?: number) {
         super();
         this.config = config;
         this.nextStageId = nextStageId;
+        this.collectablePool = collectablePool;
     }
-    preload(){
-    // Intentionally left empty: resource loading should happen in onResetEvent
+    preload() {
+        // Intentionally left empty: resource loading should happen in onResetEvent
     }
 
     // Common event handler for collecting items
@@ -65,29 +106,26 @@ class BasePlayScreen extends me.Stage {
         }
 
         // --- Ground ---
-        const groundHeight = 15;
+        const groundHeight = 45;
         const groundYPosition = viewportHeight - groundHeight;
 
-        this.ground = new me.Renderable(viewportWidth, viewportHeight, viewportWidth, groundHeight);
-        this.ground.alwaysUpdate = false;
-        this.ground.draw = function (renderer) {
-            renderer.setColor("#444");
-            renderer.fillRect(
-                this.pos.x! - this.width / 2,
-                this.pos.y! - this.height / 2,
-                this.width,
-                this.height);
-        };
-        me.game.world.addChild(this.ground, 1);
+        // this.ground = new me.Renderable(viewportWidth, viewportHeight, viewportWidth, groundHeight);
+        // this.ground.alwaysUpdate = false;
+        // this.ground.draw = function (renderer) {
+        //     renderer.setColor("#444");
+        //     renderer.fillRect(
+        //         this.pos.x! - this.width / 2,
+        //         this.pos.y! - this.height / 2,
+        //         this.width,
+        //         this.height);
+        // };
+        // me.game.world.addChild(this.ground, 1);
 
         // --- Entities ---
         this.player = new PlayerEntity(viewportWidth / 5, groundYPosition);
         me.game.world.addChild(this.player, 50);
 
-        
-
-
-
+        this.spawnCollectablesLoop();
 
         // --- Stage Time and Finish Logic ---
         this.finishTimerId = me.timer.setTimeout(() => {

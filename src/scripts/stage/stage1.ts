@@ -1,5 +1,7 @@
 import BasePlayScreen from "./baseplay";
 import { getStageConfig } from "../constants/stage_data";
+import collectables from "../constants/collectables";
+type collectTypes = keyof typeof collectables;
 
 const STAGE_CONFIG = getStageConfig(0);
 
@@ -12,6 +14,11 @@ if (!STAGE_CONFIG) {
  * Stage1Screen extends the BasePlayScreen, initializing it with
  * the specific background keys, speed, and duration for Stage 1.
  */
+
+const collectablePool: collectTypes[] = [
+    "tireBad", "laptopGood",
+];
+
 class Stage1Screen extends BasePlayScreen {
     // saab muuta kas on tohkem või vähem collectable
     // private uniqueSpawnDelay: number;
@@ -19,13 +26,13 @@ class Stage1Screen extends BasePlayScreen {
     constructor() {
         // 1. Pass the STAGE_CONFIG (IT Academy data) up to the BasePlayScreen constructor.
         // This is where the BasePlayScreen receives the configuration for the ScrollingBackground.
-        super(STAGE_CONFIG!);
+        super(STAGE_CONFIG!, collectablePool);
 
         // this.uniqueSpawnDelay = 3000; 
-    
+
         console.log(`Initialized Stage 1: ${this.config.name}`);
     }
-    
+
 }
 
 export default Stage1Screen;

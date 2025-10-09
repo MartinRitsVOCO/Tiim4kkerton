@@ -62,77 +62,79 @@ import Stage7Screen from "./scripts/stage/stage7.js";
 export let texture: me.TextureAtlas;
 
 device.onReady(() => {
-  // initialize display canvas
-  if (!video.init(1218, 562, { parent: "screen", scale: "auto" })) {
-    alert("Sinu brauser ei toeta HTML5 canvas't");
-    return;
-  }
+    // initialize display canvas
+    if (!video.init(1218, 562, { parent: "screen", scale: "auto" })) {
+        alert("Sinu brauser ei toeta HTML5 canvas't");
+        return;
+    }
 
-  // initialize audio
-  audio.init("mp3,ogg");
+    // initialize audio
+    audio.init("mp3,ogg");
 
-  // allow cross-origin for images
-  loader.setOptions({ crossOrigin: "anonymous" });
+    // allow cross-origin for images
+    loader.setOptions({ crossOrigin: "anonymous" });
 
-  // bind keys
-  input.bindKey(input.KEY.UP, "jump", true);
-  input.bindKey(input.KEY.DOWN, "duck", true);
+    // bind keys
+    input.bindKey(input.KEY.UP, "jump", true);
+    input.bindKey(input.KEY.DOWN, "duck", true);
+    input.bindKey(input.KEY.UP, "jump", false);
+    input.bindKey(input.KEY.DOWN, "duck", false);
 
-  // set and load all resources.
-  loader.preload(DataManifest, function () {
-    // esileht
-    state.set(state.MENU, new HomeScreen());
+    // set and load all resources.
+    loader.preload(DataManifest, function () {
+        // esileht
+        state.set(state.MENU, new HomeScreen());
 
-    // õpetus
-    state.set(state.READY, new InstructionsScreen());
+        // õpetus
+        state.set(state.READY, new InstructionsScreen());
 
-    // tehnika 
-    state.set(TEHNIKAINTRO, new TehnikaIntroScreen());
-    state.set(121, new Stage1Screen());
+        // tehnika 
+        state.set(TEHNIKAINTRO, new TehnikaIntroScreen());
+        state.set(121, new Stage1Screen());
 
-    // äri
-    state.set(ARIKYSIMUS, new AriKysimus());
-    state.set(ARIOIGE, new AriOige());
-    state.set(ARIVALE, new AriVale());
-    state.set(122, new Stage2Screen());
-    
-    // ehitus
-    state.set(EHITUSKYSIMUS, new EhitusKysimus());
-    state.set(EHITUSOIGE, new EhitusOige());
-    state.set(EHITUSVALE, new EhitusVale());
-    state.set(123, new Stage3Screen());
+        // äri
+        state.set(ARIKYSIMUS, new AriKysimus());
+        state.set(ARIOIGE, new AriOige());
+        state.set(ARIVALE, new AriVale());
+        state.set(122, new Stage2Screen());
 
-    // ilu
-    state.set(ILUKYSIMUS, new IluKysimus());
-    state.set(ILUOIGE, new IluOige());
-    state.set(ILUVALE, new IluVale());
-    state.set(124, new Stage4Screen());
+        // ehitus
+        state.set(EHITUSKYSIMUS, new EhitusKysimus());
+        state.set(EHITUSOIGE, new EhitusOige());
+        state.set(EHITUSVALE, new EhitusVale());
+        state.set(123, new Stage3Screen());
 
-    // toit
-    state.set(TOITKYSIMUS, new ToitKysimus());
-    state.set(TOITOIGE, new ToitOige());
-    state.set(TOITVALE, new ToitVale());
-    state.set(125, new Stage5Screen());
+        // ilu
+        state.set(ILUKYSIMUS, new IluKysimus());
+        state.set(ILUOIGE, new IluOige());
+        state.set(ILUVALE, new IluVale());
+        state.set(124, new Stage4Screen());
 
-    // turism
-    state.set(TURISMKYSIMUS, new TurismKysimus());
-    state.set(TURISMOIGE, new TurismOige());
-    state.set(TURISMVALE, new TurismVale());
-    state.set(126, new Stage6Screen());
+        // toit
+        state.set(TOITKYSIMUS, new ToitKysimus());
+        state.set(TOITOIGE, new ToitOige());
+        state.set(TOITVALE, new ToitVale());
+        state.set(125, new Stage5Screen());
 
-    // it
-    state.set(ITKYSIMUS, new ItKysimus());
-    state.set(ITOIGE, new ItOige());
-    state.set(ITVALE, new ItVale());
-    state.set(127, new Stage7Screen());
+        // turism
+        state.set(TURISMKYSIMUS, new TurismKysimus());
+        state.set(TURISMOIGE, new TurismOige());
+        state.set(TURISMVALE, new TurismVale());
+        state.set(126, new Stage6Screen());
 
-    state.set(state.GAMEOVER, new FinalScreen());
-    //state.set(state.CREDITS, new FinalScreen());
+        // it
+        state.set(ITKYSIMUS, new ItKysimus());
+        state.set(ITOIGE, new ItOige());
+        state.set(ITVALE, new ItVale());
+        state.set(127, new Stage7Screen());
 
-    // add our player entity in the entity pool
-    pool.register("mainPlayer", PlayerEntity);
+        state.set(state.GAMEOVER, new FinalScreen());
+        //state.set(state.CREDITS, new FinalScreen());
 
-    // Start the game at MENU
-    state.change(state.MENU, false);
-  });
+        // add our player entity in the entity pool
+        pool.register("mainPlayer", PlayerEntity);
+
+        // Start the game at MENU
+        state.change(state.MENU, false);
+    });
 });

@@ -118,7 +118,7 @@ const DataManifest = [
     { name: "turism_valevastus", type: "image", src: "/data/img/margit/turism_valevastus.png" },
     { name: "turism_oigevastus", type: "image", src: "/data/img/margit/turism_oigevastus.png" },
     { name: "ilu_valevastus", type: "image", src: "/data/img/margit/ilu_valevastus.png" },
-    { name: "ilu_oigevastus", type: "image", src: "/data/img/margit/ilu_oigevastus.png" }
+    { name: "ilu_oigevastus", type: "image", src: "/data/img/margit/ilu_oigevastus.png" },
 
     // Player
     { name: "Sideview", type: "image", src: "/data/img/player/walk/Sideview.png" },

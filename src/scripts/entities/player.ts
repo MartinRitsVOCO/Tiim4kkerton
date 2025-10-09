@@ -254,23 +254,23 @@ class PlayerEntity extends me.Entity {
 
     public draw(renderer: me.WebGLRenderer) {
 
-        let color = new me.Color(0, 255, 0);
-        if (this.isDucking) {
-            color.setColor(0, 0, 255);
-        } else if (this.isJumping) {
-            color.setColor(255, 0, 0);
-        }
+        // let color = new me.Color(0, 255, 0);
+        // if (this.isDucking) {
+        //     color.setColor(0, 0, 255);
+        // } else if (this.isJumping) {
+        //     color.setColor(255, 0, 0);
+        // }
 
-        renderer.currentColor = color;
+        // renderer.currentColor = color;
 
-        const rect: me.Rect = new me.Rect(
-            this.pos.x ? this.pos.x : 0,
-            this.pos.y ? this.pos.y : 0,
-            this.width,
-            this.height
-        );
+        // const rect: me.Rect = new me.Rect(
+        //     this.pos.x ? this.pos.x : 0,
+        //     this.pos.y ? this.pos.y : 0,
+        //     this.width,
+        //     this.height
+        // );
 
-        renderer.stroke(rect, true);
+        // renderer.stroke(rect, true);
 
         if (this.image) {
 
