@@ -74,6 +74,14 @@ device.onReady(() => {
     // allow cross-origin for images
     loader.setOptions({ crossOrigin: "anonymous" });
 
+    // initialize the debug plugin in development mode.
+    if (process.env.NODE_ENV === 'development') {
+        import("@melonjs/debug-plugin").then((debugPlugin) => {
+            // automatically register the debug panel
+            plugin.register(new debugPlugin.DebugPanelPlugin, "debugPanel");
+        });
+    }
+
     // bind keys
     input.bindKey(input.KEY.UP, "jump", true);
     input.bindKey(input.KEY.DOWN, "duck", true);
