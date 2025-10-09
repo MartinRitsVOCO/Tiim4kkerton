@@ -2,7 +2,10 @@ import * as me from "melonjs";
 import PlayerEntity from "../entities/player";
 import BlockerEntity from "../entities/blocker";
 import ScrollingBackground from "../renderables/background";
+// test
 import spawnCollectable from "../util/spawnCollectable";
+import collectables from "../constants/collectables";
+type collectTypes = keyof typeof collectables;
 
 // Define a new state to switch to when the game is over. 
 // Assuming you have a MENU state, or you could define a dedicated GAME_OVER state.
@@ -11,10 +14,15 @@ import spawnCollectable from "../util/spawnCollectable";
 
 const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
 
+const COLLECTABLE_SPAWN_DELAY_MS = 3000;
+
 class PlayScreen extends me.Stage {
     // Property to hold the ID of the timeout so we can cancel it if needed
     private finishTimerId: number | null = null;
     private gameSpeed: number = 2;
+
+    //test
+    private collectableTimerId: number | null = null;
 
     onCollection(type: string, wasGood: boolean, wasCollected: boolean) {
         console.log(type)
@@ -26,6 +34,30 @@ class PlayScreen extends me.Stage {
     /**
      *  action to perform on state change
      */
+
+    private collectablePool: collectTypes[] = [
+        "tireBad",
+        "laptopGood",
+    ];
+
+    private spawnCollectablesLoop() {
+        // We use the ground height defined in onResetEvent
+        const groundHeight = 15; 
+        
+        // 1. Call the utility function to spawn a collectable
+        spawnCollectable(
+            this.collectablePool, 
+            groundHeight, 
+            this.gameSpeed, 
+            this.onCollection.bind(this) // Pass the stage's handler function
+        );
+
+        // 2. Schedule the timer for the next spawn
+        this.collectableTimerId = me.timer.setTimeout(
+            () => this.spawnCollectablesLoop(),
+            COLLECTABLE_SPAWN_DELAY_MS
+        );
+    }
 
     onResetEvent() {
         const viewportWidth = me.game.viewport.width;
@@ -67,8 +99,11 @@ class PlayScreen extends me.Stage {
 
         me.game.world.addChild(player, 50)
 
+
         const blocker = new BlockerEntity(viewportWidth / 2, groundYPosition - 40, this.gameSpeed, 160, 24);
         me.game.world.addChild(blocker, 30);
+
+        this.spawnCollectablesLoop();
 
         // Stage Time
         this.finishTimerId = me.timer.setTimeout(() => {
