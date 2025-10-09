@@ -1,8 +1,9 @@
 import * as me from "melonjs";
-import game from "./game";
 import Countdown from "../utils/Countdown";
+import AriKysimus from "./AriKysimus";
+import { ARIKYSIMUS } from "../..";
 
-export default class LevelIntroScreen extends me.Stage {
+export default class TehnikaIntroScreen extends me.Stage {
   onResetEvent() {
     const bg = new me.Sprite(609, 281, { image: "tehnika" });
     me.game.world.addChild(bg);
@@ -10,7 +11,7 @@ export default class LevelIntroScreen extends me.Stage {
 
 
     const countdown = new Countdown(3, () => {
-      me.state.change(me.state.PLAY, false); // viib järgmisse ekraani (küsimus või mäng)
+      me.state.change(121, false); // viib järgmisse ekraani (küsimus või mäng)
     });
   }
 }

@@ -1,3 +1,7 @@
+
+
+
+
 import * as me from "melonjs";
 import PlayerEntity from "../entities/player";
 import BlockerEntity from "../entities/blocker";
@@ -24,8 +28,7 @@ class PlayScreen extends me.Stage {
 
 
     /**
-     *  action to perform on state change
-     */
+     *  action to perform on state change */
 
     onResetEvent() {
         const viewportWidth = me.game.viewport.width;
@@ -89,3 +92,4 @@ class PlayScreen extends me.Stage {
 };
 
 export default PlayScreen;
+

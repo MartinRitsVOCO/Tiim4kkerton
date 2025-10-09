@@ -1,3 +1,4 @@
+
 import * as me from "melonjs";
 import game from "./game";
 
@@ -8,7 +9,7 @@ export default class FinalScreen extends me.Stage {
 
     const title = new me.Text(609, 220, {
       font: "Arial",
-      size: 48,
+      size: 48,       
       fillStyle: "#fff",
       text: "Mäng läbi!",
       textAlign: "center",
