@@ -173,20 +173,21 @@ class BasePlayScreen extends me.Stage {
             this.finishTimerId = null;
         }
 
-        // Clear object references
-        if (this.scrollingBackground) {
-            me.game.world.removeChild(this.scrollingBackground); // eemalda vana
-            this.scrollingBackground = null;
-        }
-        if (this.player) {
-            me.game.world.removeChild(this.player);
-            this.player = null as any;
+        if (this.collectableTimerId) {
+            me.timer.clearTimeout(this.collectableTimerId);
+            this.collectableTimerId = null;
         }
 
-        if (this.ground) {
-            me.game.world.removeChild(this.ground);
-            this.ground = null as any;
-        }
+        // Clear object references
+
+        // for (let child in me.game.world.children) {
+        //     me.game.world.removeChild(child);
+        // }
+        this.scrollingBackground = null;
+        this.player = null as any;
+        this.ground = null as any;
+
+        me.game.world.reset()
 
         super.onDestroyEvent(...args);
     }

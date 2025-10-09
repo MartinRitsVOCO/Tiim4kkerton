@@ -18,7 +18,7 @@ const collectables = {
     height: 24
   },
   dryerBad: {
-    image: "collectable-positive-Foon",
+    image: "collectable-negative-Foon",
     good: false,
     width: 24,
     height: 24
@@ -30,7 +30,7 @@ const collectables = {
     height: 24
   },
   hammerBad: {
-    image: "collectable-positive-Haamer",
+    image: "collectable-negative-Haamer",
     good: false,
     width: 24,
     height: 24
@@ -54,7 +54,7 @@ const collectables = {
     height: 24
   },
   laptopBad: {
-    image: "collectable-positive-Laptop",
+    image: "collectable-negative-Laptop",
     good: false,
     width: 24,
     height: 24
@@ -66,7 +66,7 @@ const collectables = {
     height: 24
   },
   portfolioBad: {
-    image: "collectable-positive-Portfell",
+    image: "collectable-negative-Portfell",
     good: false,
     width: 24,
     height: 24
@@ -78,7 +78,7 @@ const collectables = {
     height: 24
   },
   bunBad: {
-    image: "collectable-positive-Saiake",
+    image: "collectable-negative-Saiake",
     good: false,
     width: 24,
     height: 24
