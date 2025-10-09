@@ -3,6 +3,7 @@ import PlayerEntity from "../entities/player";
 import ScrollingBackground from "../renderables/background";
 import { StageConfig } from "../constants/stage_data";
 import { ARIKYSIMUS, EHITUSKYSIMUS, ILUKYSIMUS, TOITKYSIMUS, TURISMKYSIMUS, ITKYSIMUS } from "../..";
+
 import spawnBlocker from "../util/spawnBlocker";
 import spawnCollectable from "../util/spawnCollectable";
 import collectables from "../constants/collectables";
@@ -14,62 +15,24 @@ type collectTypes = keyof typeof collectables;
 // const GAME_FINISH_STATE = me.state.MENU;
 
 const GAME_TRANSITION_DELAY_MS = 2000;
-const COLLECTABLE_SPAWN_DELAY_MS = 5000;
 
-// const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
-const GAME_DURATION_MS = 10000;
-type StageConstructor = new () => me.Stage;
+const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
 
 class BasePlayScreen extends me.Stage {
     protected config: StageConfig;
     protected finishTimerId: number | null = null;
-    protected nextStageId?: number; // hoiab järgmise stage state ID
-
-    protected maxSpawnDelay = COLLECTABLE_SPAWN_DELAY_MS * 1.5;
-    protected minSpawnDelay = COLLECTABLE_SPAWN_DELAY_MS * 0.75;
-
-    protected groundHeight = 45;
-    protected collectableTimerId: number | null = null;
 
     // References to moving objects
     protected scrollingBackground: ScrollingBackground | null = null;
     protected ground: me.Renderable | null = null;
-    protected player: PlayerEntity | null = null
+    protected player: PlayerEntity | null = null;
 
-    protected collectablePool: collectTypes[];
+    private collectablePool: collectTypes[];
 
-    onCollection(type: string, wasGood: boolean, wasCollected: boolean) {
-        console.log(type)
-    }
-
-    private spawnCollectablesLoop() {
-
-        let newSpawnDelay = Math.floor(Math.random() * (this.maxSpawnDelay - this.minSpawnDelay + 1)) + this.minSpawnDelay;
-
-        if (Math.random() < 0.5) {
-            spawnBlocker(this.groundHeight, this.config.gameSpeed);
-        }
-
-        // 1. Call the utility function to spawn a collectable
-        spawnCollectable(
-            this.collectablePool,
-            this.groundHeight,
-            this.config.gameSpeed,
-            this.onCollection.bind(this) // Pass the stage's handler function
-        );
-
-        // 2. Schedule the timer for the next spawn
-        this.collectableTimerId = me.timer.setTimeout(
-            () => this.spawnCollectablesLoop(),
-            newSpawnDelay
-        );
-    }
-
-    constructor(config: StageConfig, collectablePool: collectTypes[], nextStageId?: number) {
+    constructor(config: StageConfig, collectablePool: collectTypes[], any2?: any) {
         super();
         this.config = config;
-        this.nextStageId = nextStageId;
-        this.collectablePool = collectablePool;
+        this.collectablePool = collectablePool
     }
     preload() {
         // Intentionally left empty: resource loading should happen in onResetEvent
@@ -83,7 +46,14 @@ class BasePlayScreen extends me.Stage {
     /**
      * action to perform on state change (stage start)
      */
+
+    onCollection(type: string, wasGood: boolean, wasCollected: boolean) {
+        console.log(type)
+    }
+
     onResetEvent() {
+
+
         // --- Stage Setup ---
         me.game.world.addChild(new me.ColorLayer("background", "#b82e2eff"), -1);
 
@@ -92,19 +62,19 @@ class BasePlayScreen extends me.Stage {
         const gameSpeed = this.config.gameSpeed;
 
         // Map the image keys to actual HTMLImageElement objects using me.loader.getImage()
-        let backgroundKeys = this.config.backgroundKeys;
-        let imagePool: HTMLImageElement[] = backgroundKeys.map(key =>
+        const backgroundKeys = this.config.backgroundKeys;
+        const imagePool: HTMLImageElement[] = backgroundKeys.map(key =>
             me.loader.getImage(key) as HTMLImageElement
         );
 
         // --- Scrolling Background ---
         // Create the scrolling background here (after viewport sizes and loader are available)
-        // if (imagePool.length > 0) {
-        this.scrollingBackground = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, gameSpeed);
-        me.game.world.addChild(this.scrollingBackground, 0);
-        // } else {
-        //     console.warn("No background images available for this stage.");
-        // }
+        if (imagePool.length > 0) {
+            this.scrollingBackground = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, gameSpeed);
+            me.game.world.addChild(this.scrollingBackground, 0);
+        } else {
+            console.warn("No background images available for this stage.");
+        }
 
         // --- Ground ---
         const groundHeight = 45;
@@ -126,7 +96,18 @@ class BasePlayScreen extends me.Stage {
         this.player = new PlayerEntity(viewportWidth / 5, groundYPosition);
         me.game.world.addChild(this.player, 50);
 
-        this.spawnCollectablesLoop();
+
+
+        spawnBlocker(groundHeight, gameSpeed);
+
+        // 1. Call the utility function to spawn a collectable
+        spawnCollectable(
+            this.collectablePool,
+            groundHeight,
+            gameSpeed,
+            this.onCollection.bind(this) // Pass the stage's handler function
+        );
+
 
         // --- Stage Time and Finish Logic ---
         this.finishTimerId = me.timer.setTimeout(() => {
@@ -149,7 +130,6 @@ class BasePlayScreen extends me.Stage {
                 const playId = Number(playIdStr);
                 if (me.state.isCurrent(playId)) {
                     console.log(`Changing state from play ${playId} to ${nextState}`);
-                    this.scrollingBackground = null;
                     me.state.change(nextState, false);
                     transitioned = true;
                     break;
@@ -175,21 +155,20 @@ class BasePlayScreen extends me.Stage {
             this.finishTimerId = null;
         }
 
-        if (this.collectableTimerId) {
-            me.timer.clearTimeout(this.collectableTimerId);
-            this.collectableTimerId = null;
+        // Clear object references
+        if (this.scrollingBackground) {
+            me.game.world.removeChild(this.scrollingBackground); // eemalda vana
+            this.scrollingBackground = null;
+        }
+        if (this.player) {
+            me.game.world.removeChild(this.player);
+            this.player = null as any;
         }
 
-        // Clear object references
-
-        // for (let child in me.game.world.children) {
-        //     me.game.world.removeChild(child);
-        // }
-        this.scrollingBackground = null;
-        this.player = null as any;
-        this.ground = null as any;
-
-        me.game.world.reset()
+        if (this.ground) {
+            me.game.world.removeChild(this.ground);
+            this.ground = null as any;
+        }
 
         super.onDestroyEvent(...args);
     }
