@@ -9,7 +9,7 @@ export default class FinalScreen extends me.Stage {
 
     const title = new me.Text(609, 220, {
       font: "Arial",
-      size: 48,       
+      size: 48,
       fillStyle: "#fff",
       text: "Mäng läbi!",
       textAlign: "center",
@@ -26,5 +26,11 @@ export default class FinalScreen extends me.Stage {
     });
     scoreText.pos.set(me.game.viewport.width / 2, 250);
     me.game.world.addChild(scoreText);
+  }
+
+  onDestroyEvent() {
+    // No need to release pointer events for GUI_Object
+
+    me.game.world.reset();
   }
 }

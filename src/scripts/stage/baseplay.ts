@@ -14,9 +14,10 @@ type collectTypes = keyof typeof collectables;
 // const GAME_FINISH_STATE = me.state.MENU;
 
 const GAME_TRANSITION_DELAY_MS = 2000;
-const COLLECTABLE_SPAWN_DELAY_MS = 4000;
+const COLLECTABLE_SPAWN_DELAY_MS = 5000;
 
-const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
+// const GAME_DURATION_MS = 45000; // 45 seconds in milliseconds
+const GAME_DURATION_MS = 10000;
 type StageConstructor = new () => me.Stage;
 
 class BasePlayScreen extends me.Stage {
@@ -25,7 +26,7 @@ class BasePlayScreen extends me.Stage {
     protected nextStageId?: number; // hoiab järgmise stage state ID
 
     protected maxSpawnDelay = COLLECTABLE_SPAWN_DELAY_MS * 1.5;
-    protected minSpawnDelay = COLLECTABLE_SPAWN_DELAY_MS * 0.66;
+    protected minSpawnDelay = COLLECTABLE_SPAWN_DELAY_MS * 0.75;
 
     protected groundHeight = 45;
     protected collectableTimerId: number | null = null;
@@ -91,19 +92,19 @@ class BasePlayScreen extends me.Stage {
         const gameSpeed = this.config.gameSpeed;
 
         // Map the image keys to actual HTMLImageElement objects using me.loader.getImage()
-        const backgroundKeys = this.config.backgroundKeys;
-        const imagePool: HTMLImageElement[] = backgroundKeys.map(key =>
+        let backgroundKeys = this.config.backgroundKeys;
+        let imagePool: HTMLImageElement[] = backgroundKeys.map(key =>
             me.loader.getImage(key) as HTMLImageElement
         );
 
         // --- Scrolling Background ---
         // Create the scrolling background here (after viewport sizes and loader are available)
-        if (imagePool.length > 0) {
-            this.scrollingBackground = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, gameSpeed);
-            me.game.world.addChild(this.scrollingBackground, 0);
-        } else {
-            console.warn("No background images available for this stage.");
-        }
+        // if (imagePool.length > 0) {
+        this.scrollingBackground = new ScrollingBackground(viewportWidth, viewportHeight, imagePool, gameSpeed);
+        me.game.world.addChild(this.scrollingBackground, 0);
+        // } else {
+        //     console.warn("No background images available for this stage.");
+        // }
 
         // --- Ground ---
         const groundHeight = 45;
@@ -148,6 +149,7 @@ class BasePlayScreen extends me.Stage {
                 const playId = Number(playIdStr);
                 if (me.state.isCurrent(playId)) {
                     console.log(`Changing state from play ${playId} to ${nextState}`);
+                    this.scrollingBackground = null;
                     me.state.change(nextState, false);
                     transitioned = true;
                     break;

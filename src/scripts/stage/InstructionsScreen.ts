@@ -30,7 +30,9 @@ export default class InstructionsScreen extends me.Stage {
   }
 
   onDestroyEvent() {
-  // Nothing needed here for GUI_Object
+    // No need to release pointer events for GUI_Object
+
+    me.game.world.reset();
   }
 }
 

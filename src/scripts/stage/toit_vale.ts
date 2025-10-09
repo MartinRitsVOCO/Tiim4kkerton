@@ -14,4 +14,10 @@ export default class ToitVale extends me.Stage {
       me.state.change(125, false); // viib järgmisse ekraani (küsimus või mäng)
     });
   }
+
+  onDestroyEvent() {
+    // No need to release pointer events for GUI_Object
+
+    me.game.world.reset();
+  }
 }

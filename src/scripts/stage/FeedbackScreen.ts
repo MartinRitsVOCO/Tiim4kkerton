@@ -29,4 +29,10 @@ export default class FeedbackScreen extends me.Stage {
     });
     me.game.world.addChild(countdown);
   }
+
+  onDestroyEvent() {
+    // No need to release pointer events for GUI_Object
+
+    me.game.world.reset();
+  }
 }

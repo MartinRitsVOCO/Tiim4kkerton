@@ -12,7 +12,6 @@ class TitleScreen extends Stage {
      *  action to perform when leaving this screen (state change)
      */
     onDestroyEvent() {
-        ; // TODO
     }
 };
 

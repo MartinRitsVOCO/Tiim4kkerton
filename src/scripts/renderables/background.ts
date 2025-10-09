@@ -22,18 +22,18 @@ class ScrollingBackground extends me.Container {
     private managedSprites: ManagedSprite[] = []; // Array to manage sprites and their widths
 
     // Define the overlap amount (2 pixels)
-    private static OVERLAP_AMOUNT = 2; 
+    private static OVERLAP_AMOUNT = 2;
 
     // Define the maximum number of sprites to use
     private static MAX_SPRITES = 4;
     // Define the chance (0.0 to 1.0) of selecting an alternate image
-    private static VARIATION_CHANCE = 0.30;
+    private static VARIATION_CHANCE = 0.50;
 
     constructor(viewportWidth: number, viewportHeight: number, imagePool: HTMLImageElement[], speed: number) {
         // --- 1. Calculate properties using local variables before super() ---
 
         // Assume the first image in the pool is the "default" for height scaling
-        const defaultImage = imagePool[0]; 
+        const defaultImage = imagePool[0];
         const defaultNativeHeight = defaultImage.height;
 
         // Calculate the base scale factor to fit the viewport height
@@ -50,14 +50,14 @@ class ScrollingBackground extends me.Container {
         // Find the maximum possible width for container sizing
         const maxNativeWidth = Math.max(...localBackgroundImages.map(img => img.width));
         const maxScaledWidth = maxNativeWidth * scaleFactor;
-        
+
         // --- 2. Call super() ---
-        
+
         // The container needs to be wide enough to potentially hold all 4 widest sprites
         super(0, 0, maxScaledWidth * ScrollingBackground.MAX_SPRITES, viewportHeight);
 
         // --- 3. Assign properties to 'this.*' after super() ---
-        
+
         this.viewportHeight = viewportHeight;
         this.baseScaleFactor = scaleFactor;
         this.speed = speed;
@@ -79,7 +79,7 @@ class ScrollingBackground extends me.Container {
                 // Manually create the sprite using the default image object, bypassing the random logic
                 const scaledWidth = defaultImageObject.width * this.baseScaleFactor;
 
-                const sprite = new me.Sprite(currentX, 0, { 
+                const sprite = new me.Sprite(currentX, 0, {
                     image: defaultImageObject.image,
                     anchorPoint: new me.Vector2d(0, 0),
                 });
@@ -95,14 +95,17 @@ class ScrollingBackground extends me.Container {
                 // which includes the 10% chance for a variation.
                 newManagedSprite = this.createNewSprite(currentX, 0);
             }
-            
+
             this.managedSprites.push(newManagedSprite);
             this.addChild(newManagedSprite.sprite, 0);
-            
+
+
+
             // Increment currentX by the *actual scaled width* of the created sprite
             currentX += newManagedSprite.scaledWidth - ScrollingBackground.OVERLAP_AMOUNT;
         }
 
+        // this.body.vel.x = -this.speed;
         this.isPersistent = true;
     }
 
@@ -114,11 +117,11 @@ class ScrollingBackground extends me.Container {
             // The pool of variation images starts at index 1
             const variationPool = this.backgroundImages.slice(1);
 
-             // Check if there are any variation images available
+            // Check if there are any variation images available
             if (variationPool.length > 0) {
                 // Select a random index within the variation pool
                 const randomIndexInPool = Math.floor(Math.random() * variationPool.length);
-                
+
                 // Get the image from the variation pool
                 selectedImage = variationPool[randomIndexInPool];
             } else {
@@ -133,7 +136,7 @@ class ScrollingBackground extends me.Container {
         // Calculate the scaled width based on the selected image's native width
         const scaledWidth = selectedImage.width * this.baseScaleFactor;
 
-        const sprite = new me.Sprite(x, y, { 
+        const sprite = new me.Sprite(x, y, {
             image: selectedImage.image,
             anchorPoint: new me.Vector2d(0, 0), // Top-left anchor
         });
@@ -147,9 +150,9 @@ class ScrollingBackground extends me.Container {
         };
     }
 
-    public update(dt: number) : boolean {
+    public update(dt: number): boolean {
 
-        const dx = this.speed*2; // * (dt / 1000)
+        const dx = this.speed * 2; // * (dt / 1000)
 
         // 1. Move all sprites
         for (const managedSprite of this.managedSprites) {
@@ -175,11 +178,11 @@ class ScrollingBackground extends me.Container {
 
             // Recycling condition: The right edge of the sprite is at or past the left edge of the viewport (x = 0)
             if (sprite.pos.x! + managedSprite.scaledWidth <= 0) {
-                
+
                 // --- Recycling and Replacement ---
-                
+
                 // 3a. Remove and destroy the old sprite instance
-                this.removeChild(sprite, true); 
+                this.removeChild(sprite, true);
 
                 // 3b. Create a brand new managed sprite (potentially with a new image/width)
                 // Its new starting position is the found rightmostEdgeX - 2px overlap
@@ -189,13 +192,13 @@ class ScrollingBackground extends me.Container {
                 // 3c. Update the array slot and container
                 this.managedSprites[i] = newManagedSprite;
                 this.addChild(newManagedSprite.sprite, 0);
-                
+
                 // 3d. Update the rightmost edge position for the next sprite that might recycle this frame
                 // This ensures sprites line up correctly even if multiple recycle in one frame.
                 rightmostEdgeX += newManagedSprite.scaledWidth;
             }
         }
-        
+
         // Call the parent update to update the container's children
         super.update(dt);
 

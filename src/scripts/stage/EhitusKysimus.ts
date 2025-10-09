@@ -45,5 +45,7 @@ export default class EhitusKysimus extends me.Stage {
 
     onDestroyEvent() {
         // No need to release pointer events for GUI_Object
+
+        me.game.world.reset();
     }
 }

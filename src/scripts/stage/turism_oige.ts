@@ -13,4 +13,10 @@ export default class TurismOige extends me.Stage {
       me.state.change(126, false); // viib järgmisse ekraani (küsimus või mäng)
     });
   }
+
+  onDestroyEvent() {
+    // No need to release pointer events for GUI_Object
+
+    me.game.world.reset();
+  }
 }

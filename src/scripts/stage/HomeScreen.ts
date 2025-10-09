@@ -9,14 +9,14 @@ export default class HomeScreen extends me.Stage {
 
     const viewportWidth = me.game.viewport.width;
     const viewportHeight = me.game.viewport.height;
-    
+
     const imageNativeWidth = image.width;
     const imageNativeHeight = image.height;
-    
+
     const scaleFactor = viewportHeight / imageNativeHeight;
     const scaledWidth = imageNativeWidth * scaleFactor;
     const scaledHeight = viewportHeight;
-    
+
     const backgroundImage = new me.Sprite(0, 0, { image: image, anchorPoint: new me.Vector2d(0, 0) });
     backgroundImage.scale(scaleFactor, scaleFactor);
     me.game.world.addChild(backgroundImage, -2);
@@ -41,11 +41,17 @@ export default class HomeScreen extends me.Stage {
       }
     })();
 
-  me.game.world.addChild(this.btn as any, 10); // kindla layeriga
+    me.game.world.addChild(this.btn as any, 10); // kindla layeriga
   }
 
   /*  onDestroyEvent() {
         //  EEMALDA KLIKISÜNDMUS ET MÄLU EI LEKIKS
         me.input.releasePointerEvent("pointerdown", this.btn);
     } */
+
+  onDestroyEvent() {
+    // No need to release pointer events for GUI_Object
+
+    me.game.world.reset();
+  }
 }
